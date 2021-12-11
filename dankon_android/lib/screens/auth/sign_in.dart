@@ -17,9 +17,16 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(title: const Text("Sign in"),),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(child: const Text("Sign in with Google"), onPressed: () async {
-          context.read<AuthenticationService>().signInWithGoogle();
-        },),
+        child: Column(
+          children: [
+            ElevatedButton(child: const Text("Sign in with Google"), onPressed: () async {
+              context.read<AuthenticationService>().signInWithGoogle();
+            },),
+            ElevatedButton(child: const Text("Sign in with FB"), onPressed: () async {
+              context.read<AuthenticationService>().signInWithFacebook();
+            },),
+          ],
+        ),
       ),
     );
   }
