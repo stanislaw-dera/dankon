@@ -1,4 +1,5 @@
 import 'package:dankon/firebase_options.dart';
+import 'package:dankon/screens/home/search.dart';
 import 'package:dankon/services/authentication.dart';
 import 'package:dankon/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,12 +28,16 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Dankon',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Wrapper(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const Wrapper(),
+          '/search': (context) => SearchScreen()
+        },
       ),
     );
   }
