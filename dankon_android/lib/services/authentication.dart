@@ -1,4 +1,7 @@
+import 'package:dankon/models/the_user.dart';
+import 'package:dankon/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 
@@ -11,7 +14,7 @@ class AuthenticationService {
     await _firebaseAuth.signOut();
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -24,8 +27,13 @@ class AuthenticationService {
       idToken: googleAuth?.idToken,
     );
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+
+    if(userCredential.additionalUserInfo!.isNewUser == true) {
+      TheUser theUser = TheUser(uid: userCredential.user!.uid, name: userCredential.user!.displayName.toString(), urlAvatar: userCredential.user!.photoURL.toString(), bio: "");
+      DatabaseService databaseService = DatabaseService(uid: theUser.uid);
+      await databaseService.createUser(theUser);
+    }
   }
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();

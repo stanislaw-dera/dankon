@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Authenticated'),),
+      appBar: AppBar(title: Text('Dankon')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(child: Text("Sign out"), onPressed: () {
