@@ -1,3 +1,4 @@
+import 'package:dankon/constants.dart';
 import 'package:dankon/firebase_options.dart';
 import 'package:dankon/screens/home/search.dart';
 import 'package:dankon/services/authentication.dart';
@@ -29,10 +30,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Dankon',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+        theme: kThemeData,
         initialRoute: '/',
         routes: {
           '/': (context) => const Wrapper(),
