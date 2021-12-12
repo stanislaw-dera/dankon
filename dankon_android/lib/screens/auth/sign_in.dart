@@ -50,7 +50,7 @@ class _SignInState extends State<SignIn> {
           SignInButton(
             Buttons.FacebookNew,
             onPressed: () {
-              context.read<AuthenticationService>().signInWithGoogle();
+              context.read<AuthenticationService>().signInWithFacebook();
             },
           ),
 
