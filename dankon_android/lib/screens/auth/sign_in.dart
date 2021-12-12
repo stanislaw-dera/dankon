@@ -1,7 +1,10 @@
+import 'package:dankon/constants.dart';
 import 'package:dankon/services/authentication.dart';
+import 'package:dankon/widgets/huge_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -14,19 +17,44 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Sign in"),),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            ElevatedButton(child: const Text("Sign in with Google"), onPressed: () async {
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(width: double.infinity,),
+          const Text(
+            ":Dankon",
+            style: TextStyle(
+                fontSize: 48,
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text("The nicest place to hang out",
+              style: TextStyle(fontSize: 16)),
+          const SizedBox(
+            height: 40,
+          ),
+          SignInButton(
+            Buttons.Google,
+
+            onPressed: () {
               context.read<AuthenticationService>().signInWithGoogle();
-            },),
-            ElevatedButton(child: const Text("Sign in with FB"), onPressed: () async {
-              context.read<AuthenticationService>().signInWithFacebook();
-            },),
-          ],
-        ),
+            },
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SignInButton(
+            Buttons.FacebookNew,
+            onPressed: () {
+              context.read<AuthenticationService>().signInWithGoogle();
+            },
+          ),
+
+        ],
       ),
     );
   }
