@@ -1,6 +1,7 @@
 import 'package:dankon/constants.dart';
 import 'package:dankon/firebase_options.dart';
 import 'package:dankon/screens/home/search.dart';
+import 'package:dankon/screens/home/settings.dart';
 import 'package:dankon/services/authentication.dart';
 import 'package:dankon/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,12 +30,14 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Dankon',
         theme: kThemeData,
         initialRoute: '/',
         routes: {
           '/': (context) => const Wrapper(),
-          '/search': (context) => SearchScreen()
+          '/search': (context) => SearchScreen(),
+          '/settings': (context) => SettingsScreen()
         },
       ),
     );

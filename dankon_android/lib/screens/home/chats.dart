@@ -13,14 +13,13 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
-  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('chats').snapshots();
-
 
   @override
   Widget build(BuildContext context) {
 
     final myUid = context.read<User?>()!.uid;
     DatabaseService databaseService = DatabaseService(uid: myUid);
+    final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('chats').where('allParticipants', arrayContains: myUid).snapshots();
 
     return StreamBuilder<QuerySnapshot>(
       stream: _usersStream,

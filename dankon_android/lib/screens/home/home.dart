@@ -11,6 +11,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final User me = context.read<User>();
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -26,12 +29,15 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      backgroundColor: kTextColor,
-                      radius: 20,
-                      child: IconButton(onPressed: () {
-                        context.read<AuthenticationService>().signOut();
-                      }, icon: Icon(Icons.logout, size: 15, color: Colors.white,)),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/settings');
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: kTextColor,
+                        backgroundImage: NetworkImage(me.photoURL.toString()),
+                        radius: 20,
+                      ),
                     ),
                     SizedBox(width: 20,),
                     Text('Dankon', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)

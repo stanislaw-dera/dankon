@@ -10,5 +10,16 @@ ThemeData kThemeData = ThemeData(
     backgroundColor: kPrimaryColor,
     foregroundColor: kTextColor,
     elevation: 0,
+  ),
+  appBarTheme: AppBarTheme(
+    backgroundColor: kPrimaryColor,
+    elevation: 0,
+    titleTextStyle: TextStyle(
+      color: kTextColor,
+      fontSize: 18
+    ),
+    iconTheme: IconThemeData(
+      color: kTextColor
+    )
   )
 );
