@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dankon/constants.dart';
 import 'package:dankon/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,35 +33,34 @@ class _ChatsState extends State<Chats> {
           return Center(child: CircularProgressIndicator());
         }
 
-        return Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+        return ListView(
+          physics: BouncingScrollPhysics(),
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-              String title = '';
-              String image = '';
-              for(var i = 0; i<data['participantsData'].length; i++) {
-                if(data['participantsData'][i]['uid'] != myUid) {
-                  title = data['participantsData'][i]['name'];
-                  image = data['participantsData'][i]['urlAvatar'];
-                }
-
+            String title = '';
+            String image = '';
+            for(var i = 0; i<data['participantsData'].length; i++) {
+              if(data['participantsData'][i]['uid'] != myUid) {
+                title = data['participantsData'][i]['name'];
+                image = data['participantsData'][i]['urlAvatar'];
               }
 
-              return Card(
-                child: ListTile(
-                  title: Text(title),
-                  subtitle: Text("${data["danks"].toString()} danks!"),
-                  leading: CircleAvatar(backgroundImage: NetworkImage(image),),
-                  trailing: TextButton(onPressed: () {
-                    databaseService.incrementDanks(document.id);
-                  },
-                  child: Text('Dankon!'),),
+            }
+
+            return ListTile(
+              title: Text(title),
+              subtitle: Text("${data["danks"].toString()} danks!"),
+              leading: CircleAvatar(backgroundImage: NetworkImage(image),),
+              trailing: OutlinedButton(onPressed: () {
+                databaseService.incrementDanks(document.id);
+              },
+              child: Text('Dankon!'),
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(kTextColor)
                 ),
-              );
-            }).toList(),
-          ),
+            ));
+          }).toList(),
         );
       },
     );

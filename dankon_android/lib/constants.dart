@@ -6,5 +6,9 @@ const kTextColor = Color(0xFF2E2E2E);
 
 ThemeData kThemeData = ThemeData(
   primaryColor: kPrimaryColor,
-  scaffoldBackgroundColor: kSecondaryColor,
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: kPrimaryColor,
+    foregroundColor: kTextColor,
+    elevation: 0,
+  )
 );
