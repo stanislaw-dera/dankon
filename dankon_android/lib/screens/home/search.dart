@@ -19,7 +19,6 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
 
     final myUid = context.read<User?>()!.uid;
-    const snackBar = SnackBar(content: Text('Created a chat!'));
     DatabaseService databaseService = DatabaseService(uid: myUid);
 
     return MaterialApp(
@@ -80,8 +79,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   title: Text(document['name']),
                                   leading: CircleAvatar(backgroundImage: NetworkImage(document["urlAvatar"]),),
                                   trailing: IconButton(icon: Icon(Icons.person_add, color: Theme.of(context).primaryColor,), onPressed: () async {
-                                    await databaseService.createChat(TheUser(uid: document['uid'], name: document['name'], urlAvatar: document['urlAvatar'], bio: document['bio']));
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    String msg = await databaseService.createChat(TheUser(uid: document['uid'], name: document['name'], urlAvatar: document['urlAvatar'], bio: document['bio']));
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
                                     },),
                                 ),
                               );

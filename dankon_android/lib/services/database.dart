@@ -39,19 +39,25 @@ class DatabaseService {
         bio: documentSnapshot.get('bio'));
   }
 
-  Future<void> createChat(TheUser member) async {
+  Future<String> createChat(TheUser member) async {
     TheUser? me = await getUserByUid(uid);
+
+    if(me!.uid == member.uid) {
+      return "You cannot chat with yourself";
+    }
 
 
     List participantsData = [
       member.toJson(),
-      me!.toJson()
+      me.toJson()
     ];
 
     await chatsCollection.add({'name': 'New chatroom', 'allParticipants': [
       me.uid,
       member.uid
     ], 'participantsData': participantsData, 'danks': 0});
+
+    return "Created a chat";
   }
 
   Future<void> incrementDanks(chatId) async {
