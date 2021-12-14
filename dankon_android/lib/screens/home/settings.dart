@@ -1,5 +1,7 @@
+import 'package:dankon/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/src/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -16,7 +18,8 @@ class SettingsScreen extends StatelessWidget {
             title: Text('Logout'),
             leading: Icon(Icons.logout),
             onTap: () {
-
+              context.read<AuthenticationService>().signOut();
+              Navigator.of(context).pop();
             },
           ),
           ListTile(
