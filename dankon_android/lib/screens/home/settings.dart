@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
             title: Text('About the app'),
             leading: Icon(Icons.info),
             onTap: () {
-              showAboutDialog(context: context, applicationIcon: CircleAvatar(backgroundColor: Theme.of(context).primaryColor, backgroundImage: AssetImage('assets/app_logo.png')), applicationVersion: '2.0.0');
+              showAboutDialog(context: context, applicationIcon: CircleAvatar(backgroundColor: Theme.of(context).primaryColor, backgroundImage: AssetImage('assets/app_logo.png')), applicationVersion: dotenv.env['VERSION']);
             },
           )
         ],

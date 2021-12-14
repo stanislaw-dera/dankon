@@ -48,3 +48,5 @@ app.*.map.json
 firebase_options.dart
 
 key.properties
+
+*.env
