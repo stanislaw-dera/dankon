@@ -2,6 +2,7 @@ import 'package:dankon/constants.dart';
 import 'package:dankon/screens/home/chats.dart';
 import 'package:dankon/services/authentication.dart';
 import 'package:dankon/services/database.dart';
+import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
@@ -35,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                       },
                       child: CircleAvatar(
                         backgroundColor: kTextColor,
-                        backgroundImage: NetworkImage(me.photoURL.toString()),
+                        backgroundImage: NetworkImage(getAccessUrlIfFacebook(me.photoURL.toString())),
                         radius: 20,
                       ),
                     ),

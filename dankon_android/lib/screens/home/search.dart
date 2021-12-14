@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dankon/models/the_user.dart';
 import 'package:dankon/services/database.dart';
+import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
@@ -77,7 +78,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               return Card(
                                 child: ListTile(
                                   title: Text(document['name']),
-                                  leading: CircleAvatar(backgroundImage: NetworkImage(document["urlAvatar"]),),
+                                  leading: CircleAvatar(backgroundImage: NetworkImage(getAccessUrlIfFacebook(document["urlAvatar"])),),
                                   trailing: IconButton(icon: Icon(Icons.person_add, color: Theme.of(context).primaryColor,), onPressed: () async {
                                     String msg = await databaseService.createChat(TheUser(uid: document['uid'], name: document['name'], urlAvatar: document['urlAvatar'], bio: document['bio']));
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
