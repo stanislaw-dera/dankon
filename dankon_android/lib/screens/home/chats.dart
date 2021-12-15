@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dankon/constants.dart';
+import 'package:dankon/models/chat.dart';
 import 'package:dankon/services/database.dart';
 import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,21 +37,15 @@ class _ChatsState extends State<Chats> {
         return ListView(
           physics: BouncingScrollPhysics(),
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-            String title = '';
-            String image = '';
-            for(var i = 0; i<data['participantsData'].length; i++) {
-              if(data['participantsData'][i]['uid'] != myUid) {
-                title = data['participantsData'][i]['name'];
-                image = data['participantsData'][i]['urlAvatar'];
-              }
+            Chat chat =  Chat.fromJson(document.data()! as Map<String, dynamic>);
 
-            }
+            String title = chat.getChatName(myUid);
+            String image = chat.getChatImageUrl(myUid);
 
             return ListTile(
               title: Text(title),
-              subtitle: Text("${data["danks"].toString()} danks!"),
+              subtitle: Text("${chat.danks} danks!"),
               leading: CircleAvatar(backgroundImage: NetworkImage(getAccessUrlIfFacebook(image)),),
               trailing: OutlinedButton(onPressed: () {
                 databaseService.incrementDanks(document.id);

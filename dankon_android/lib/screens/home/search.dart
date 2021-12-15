@@ -80,7 +80,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   title: Text(document['name']),
                                   leading: CircleAvatar(backgroundImage: NetworkImage(getAccessUrlIfFacebook(document["urlAvatar"])),),
                                   trailing: IconButton(icon: Icon(Icons.person_add, color: Theme.of(context).primaryColor,), onPressed: () async {
-                                    String msg = await databaseService.createChat(TheUser(uid: document['uid'], name: document['name'], urlAvatar: document['urlAvatar'], bio: document['bio']));
+                                    String msg = await databaseService.createChat(TheUser(uid: document['uid'], name: document['name'], urlAvatar: document['urlAvatar']));
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
                                     },),
                                 ),

@@ -35,8 +35,7 @@ class DatabaseService {
     return TheUser(
         uid: documentSnapshot.get('uid'),
         name: documentSnapshot.get('name'),
-        urlAvatar: documentSnapshot.get('urlAvatar'),
-        bio: documentSnapshot.get('bio'));
+        urlAvatar: documentSnapshot.get('urlAvatar'));
   }
 
   Future<String> createChat(TheUser member) async {

@@ -31,7 +31,7 @@ class AuthenticationService {
     UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
     if(userCredential.additionalUserInfo!.isNewUser == true) {
-      TheUser theUser = TheUser(uid: userCredential.user!.uid, name: userCredential.user!.displayName.toString(), urlAvatar: userCredential.user!.photoURL.toString(), bio: "");
+      TheUser theUser = TheUser(uid: userCredential.user!.uid, name: userCredential.user!.displayName.toString(), urlAvatar: userCredential.user!.photoURL.toString());
       DatabaseService databaseService = DatabaseService(uid: theUser.uid);
       await databaseService.createUser(theUser);
     }
@@ -48,7 +48,7 @@ class AuthenticationService {
     UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
 
     if(userCredential.additionalUserInfo!.isNewUser == true) {
-      TheUser theUser = TheUser(uid: userCredential.user!.uid, name: userCredential.user!.displayName.toString(), urlAvatar: userCredential.user!.photoURL.toString(), bio: "");
+      TheUser theUser = TheUser(uid: userCredential.user!.uid, name: userCredential.user!.displayName.toString(), urlAvatar: userCredential.user!.photoURL.toString());
       DatabaseService databaseService = DatabaseService(uid: theUser.uid);
       await databaseService.createUser(theUser);
     }
