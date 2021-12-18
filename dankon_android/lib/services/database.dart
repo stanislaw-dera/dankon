@@ -4,6 +4,7 @@ import 'package:dankon/models/the_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:characters/characters.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class DatabaseService {
   final String? uid;
@@ -22,8 +23,6 @@ class DatabaseService {
     }
 
     userJSON.addAll({"search": searchIndex});
-
-    print(userJSON);
 
     await usersCollection.doc(theUser.uid).set(
           userJSON,
@@ -64,10 +63,25 @@ class DatabaseService {
 
   Future<Response> incrementDanks(Chat chat, User? me) async {
 
-    await chatsCollection.doc(chat.id).update({
+    Map<String, dynamic> updateData = {
       'danks': FieldValue.increment(1),
-      'lastDankAuthor': me!.uid
-    });
+      'lastDankAuthor': me!.uid,
+      'lastDankTime': FieldValue.serverTimestamp()
+    };
+
+    // update lastDankstreakTime
+    DateTime last = DateTime.utc(chat.lastDankTime.year, chat.lastDankTime.month, chat.lastDankTime.day);
+    int difference = DateTime.now().difference(last).inDays;
+    if(difference == 0) {
+      updateData["lastDankstreakTime"] = FieldValue.serverTimestamp();
+    }
+
+    // start a new dankstreak if the previous one has expired
+    if(chat.startNewDankstreak()) {
+      updateData["dankstreakFrom"] = FieldValue.serverTimestamp();
+    }
+
+    await chatsCollection.doc(chat.id).update(updateData);
 
     return Response(type: 'success');
   }

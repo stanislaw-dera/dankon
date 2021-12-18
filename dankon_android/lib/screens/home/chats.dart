@@ -46,9 +46,11 @@ class _ChatsState extends State<Chats> {
             String title = chat.getChatName(myUid);
             String image = chat.getChatImageUrl(myUid);
 
+            String streakText = chat.countDays() > 0 ? "🔥${chat.countDays()} " : "";
+
             return ListTile(
                 title: Text(title),
-                subtitle: Text("${chat.danks} danks!"),
+                subtitle: Text("${chat.danks} danks! ${streakText}"),
                 leading: CircleAvatar(
                   backgroundImage: NetworkImage(getAccessUrlIfFacebook(image)),
                 ),
