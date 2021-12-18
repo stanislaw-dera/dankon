@@ -15,13 +15,14 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
-
   @override
   Widget build(BuildContext context) {
-
     final myUid = context.read<User?>()!.uid;
     DatabaseService databaseService = DatabaseService(uid: myUid);
-    final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance.collection('chats').where('allParticipants', arrayContains: myUid).snapshots();
+    final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+        .collection('chats')
+        .where('allParticipants', arrayContains: myUid)
+        .snapshots();
 
     return StreamBuilder<QuerySnapshot>(
       stream: _usersStream,
@@ -37,28 +38,38 @@ class _ChatsState extends State<Chats> {
         return ListView(
           physics: BouncingScrollPhysics(),
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
-
-            Chat chat =  Chat.fromJson(document.data()! as Map<String, dynamic>);
+            Map<String, dynamic> jsonData =
+                document.data()! as Map<String, dynamic>;
+            jsonData["id"] = document.id;
+            Chat chat = Chat.fromJson(jsonData);
 
             String title = chat.getChatName(myUid);
             String image = chat.getChatImageUrl(myUid);
 
             return ListTile(
-              title: Text(title),
-              subtitle: Text("${chat.danks} danks!"),
-              leading: CircleAvatar(backgroundImage: NetworkImage(getAccessUrlIfFacebook(image)),),
-              trailing: OutlinedButton(onPressed: () {
-                databaseService.incrementDanks(document.id);
-              },
-              child: Text('Dankon!'),
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(kTextColor)
+                title: Text(title),
+                subtitle: Text("${chat.danks} danks!"),
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(getAccessUrlIfFacebook(image)),
                 ),
-            ));
+                trailing: chat.canIDank(myUid)
+                    ? OutlinedButton(
+                        onPressed: () {
+                          databaseService.incrementDanks(
+                              chat, context.read<User?>());
+                        },
+                        child: Text('Dankon!'),
+                        style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.all(kTextColor)),
+                      )
+                    : Padding(
+                      padding: const EdgeInsets.only(right: 30.0),
+                      child: Icon(Icons.check_circle_outline),
+                    ));
           }).toList(),
         );
       },
     );
   }
 }
-

@@ -12,6 +12,7 @@ List<TheUser> jsonToListOfUsers(List json) {
 }
 
 class Chat {
+  final String id;
   final String chatroomName;
   final List allParticipants;
   final List participantsData;
@@ -55,7 +56,7 @@ class Chat {
   }
 
   Chat(this.chatroomName, this.allParticipants, this.participantsData,
-      this.danks, this.lastDankAuthor, this.danksStreakFrom, this.lastDankTime);
+      this.danks, this.lastDankAuthor, this.danksStreakFrom, this.lastDankTime, this.id);
 
   Map<String, dynamic> toJson() => {
         'chatroomName': chatroomName,
@@ -68,7 +69,8 @@ class Chat {
       };
 
   Chat.fromJson(Map<String, dynamic> json)
-      : chatroomName = json["name"],
+      : id = json["id"],
+        chatroomName = json["name"],
         allParticipants = json["allParticipants"],
         participantsData = jsonToListOfUsers(json["participantsData"]),
         danks = json["danks"],
