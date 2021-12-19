@@ -33,6 +33,8 @@ class Chat {
   final DateTime lastDankstreakTime;
   final DateTime dankstreakFrom;
 
+  final String christmasBadge;
+
   bool canIDank(String myUid) {
     if (lastDankAuthor != myUid) {
       return true;
@@ -66,10 +68,11 @@ class Chat {
   }
 
   bool startNewDankstreak() {
-    DateTime from = DateTime.utc(lastDankstreakTime.year, lastDankstreakTime.month, lastDankstreakTime.day);
+    DateTime from = DateTime.utc(lastDankstreakTime.year,
+        lastDankstreakTime.month, lastDankstreakTime.day);
     int difference = DateTime.now().difference(from).inDays;
 
-    if(difference > 1) {
+    if (difference > 1) {
       return true;
     } else {
       return false;
@@ -90,7 +93,9 @@ class Chat {
       this.lastDankAuthor,
       this.dankstreakFrom,
       this.lastDankTime,
-      this.id, this.lastDankstreakTime);
+      this.id,
+      this.lastDankstreakTime,
+      this.christmasBadge);
 
   Map<String, dynamic> toJson() => {
         'chatroomName': chatroomName,
@@ -101,6 +106,7 @@ class Chat {
         'lastDankTime': lastDankTime,
         'lastDankstreakTime': lastDankstreakTime,
         'dankstreakFrom': dankstreakFrom,
+        'christmasBadge': christmasBadge,
       };
 
   Chat.fromJson(Map<String, dynamic> json)
@@ -112,5 +118,6 @@ class Chat {
         lastDankAuthor = json["lastDankAuthor"] ?? "",
         lastDankTime = timestampToDateTime(json["lastDankTime"]),
         lastDankstreakTime = timestampToDateTime(json["lastDankstreakTime"]),
-        dankstreakFrom = timestampToDateTime(json["dankstreakFrom"]);
+        dankstreakFrom = timestampToDateTime(json["dankstreakFrom"]),
+        christmasBadge = json["christmasBadge"] ?? "";
 }

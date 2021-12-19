@@ -1,17 +1,28 @@
+import 'package:dankon/models/chat.dart';
+import 'package:dankon/services/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
 
 class ChristmasChoice extends StatelessWidget {
 
   final String emoji;
+  final Chat chat;
 
-  const ChristmasChoice({Key? key, required this.emoji}) : super(key: key);
+  const ChristmasChoice({Key? key, required this.emoji, required this.chat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    final myUid = context.read<User?>()!.uid;
+    DatabaseService databaseService = DatabaseService(uid: myUid);
+
     return Card(
       child: InkWell(
           onTap: () {
             // set chat badge
+            databaseService.setChristmasBadge(chat, emoji);
+            Navigator.pop(context);
           },
           child: Center(
               child: Text(
@@ -24,7 +35,10 @@ class ChristmasChoice extends StatelessWidget {
 
 
 class ChristmasBottomSheet extends StatelessWidget {
-  const ChristmasBottomSheet({Key? key}) : super(key: key);
+
+  final Chat chat;
+
+  const ChristmasBottomSheet({Key? key, required this.chat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +60,15 @@ class ChristmasBottomSheet extends StatelessWidget {
               child: GridView.count(
                 physics: const BouncingScrollPhysics(),
                 crossAxisCount: 4,
-                children: const [
-                  ChristmasChoice(emoji: "🎄"),
-                  ChristmasChoice(emoji: "🎀"),
+                children: [
+                  ChristmasChoice(emoji: "🎄", chat: chat),
+                  ChristmasChoice(emoji: "🎀", chat: chat),
+                  ChristmasChoice(emoji: "⭐", chat: chat),
+                  ChristmasChoice(emoji: "🧦", chat: chat),
+                  ChristmasChoice(emoji: "🔥", chat: chat),
+                  ChristmasChoice(emoji: "☃", chat: chat),
+                  ChristmasChoice(emoji: "🎁", chat: chat),
+                  ChristmasChoice(emoji: "🕯️", chat: chat)
                 ],
               ),
             ),

@@ -51,7 +51,7 @@ class _ChatsState extends State<Chats> {
                 chat.countDays() > 0 ? "🔥${chat.countDays()} " : "";
 
             return ListTile(
-                title: Text(title),
+                title: Text("${title} ${chat.christmasBadge}"),
                 subtitle: Text("${chat.danks} danks! ${streakText}"),
                 leading: CircleAvatar(
                   backgroundImage: NetworkImage(getAccessUrlIfFacebook(image)),
@@ -66,7 +66,7 @@ class _ChatsState extends State<Chats> {
                           showModalBottomSheet(
                               context: context,
                               builder: (context) {
-                                return ChristmasBottomSheet();
+                                return ChristmasBottomSheet(chat: chat);
                               });
                         },
                         child: Text('Dankon!'),
