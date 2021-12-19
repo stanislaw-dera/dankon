@@ -47,6 +47,10 @@ class DatabaseService {
       return "You cannot chat with yourself";
     }
 
+    QuerySnapshot theSameChat = await chatsCollection.where('allParticipants', whereIn: [[member.uid, me.uid], [me.uid, member.uid]]).get();
+    if(theSameChat.docs.isNotEmpty) {
+      return "The same chat already exists";
+    }
 
     List participantsData = [
       member.toJson(),
