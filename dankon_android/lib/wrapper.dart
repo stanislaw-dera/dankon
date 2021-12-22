@@ -1,6 +1,8 @@
 import 'package:dankon/screens/auth/sign_in.dart';
 import 'package:dankon/screens/home/home.dart';
+import 'package:dankon/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'firebase_options.dart';
@@ -16,10 +18,16 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     if (firebaseUser == null) {
       return const SignIn();
     } else {
+      messaging.getToken().then((value) {
+        DatabaseService(uid: firebaseUser.uid)
+            .saveNotificationsToken(value.toString());
+      });
+
       return const HomeScreen();
     }
   }

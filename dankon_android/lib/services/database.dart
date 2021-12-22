@@ -96,4 +96,11 @@ class DatabaseService {
     });
     return Response(type: 'success');
   }
+
+  Future<Response> saveNotificationsToken(String token) async {
+    await usersCollection.doc(uid).update({
+      'notificationsTokens': FieldValue.arrayUnion([token])
+    });
+    return Response(type: "success");
+  }
 }

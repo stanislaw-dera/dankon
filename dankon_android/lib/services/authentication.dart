@@ -1,6 +1,7 @@
 import 'package:dankon/models/the_user.dart';
 import 'package:dankon/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,7 +12,17 @@ class AuthenticationService {
 
   AuthenticationService(this._firebaseAuth);
 
+  String? uid() {
+    if (_firebaseAuth.currentUser != null) {
+      return _firebaseAuth.currentUser!.uid;
+    } else {
+      return null;
+    }
+  }
+
   Future<void> signOut() async {
+    var messaging = FirebaseMessaging.instance;
+    messaging.deleteToken();
     await _firebaseAuth.signOut();
   }
 
