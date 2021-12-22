@@ -6,6 +6,7 @@ import 'package:dankon/services/database.dart';
 import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:provider/src/provider.dart';
 
 class Chats extends StatefulWidget {
@@ -16,8 +17,22 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      if(info.updateAvailability == UpdateAvailability.updateAvailable) {
+        print(info.updateAvailability);
+        InAppUpdate.startFlexibleUpdate();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    checkForUpdate();
+
     final myUid = context.read<User?>()!.uid;
     DatabaseService databaseService = DatabaseService(uid: myUid);
     final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
