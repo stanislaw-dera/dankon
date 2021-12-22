@@ -9,6 +9,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,10 +21,35 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load(fileName: ".env");
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _messangerKey = GlobalKey<ScaffoldMessengerState>();
+
+  late FirebaseMessaging messaging;
+  @override
+  void initState() {
+    super.initState();
+
+    String? uid = AuthenticationService(FirebaseAuth.instance).uid();
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      final snackbar = SnackBar(
+        content: Text(event.notification!.title.toString()),
+      );
+
+      _messangerKey.currentState!.showSnackBar(snackbar);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -28,10 +58,13 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) => context.read<AuthenticationService>().authStateChanges, initialData: null,
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChanges,
+          initialData: null,
         )
       ],
       child: MaterialApp(
+        scaffoldMessengerKey: _messangerKey,
         debugShowCheckedModeBanner: false,
         title: 'Dankon',
         theme: kThemeData,
@@ -45,4 +78,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

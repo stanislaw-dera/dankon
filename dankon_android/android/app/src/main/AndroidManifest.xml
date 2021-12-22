@@ -6,6 +6,11 @@
     <application
         android:label="Dankon"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_stat_d" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

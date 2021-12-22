@@ -89,4 +89,18 @@ class DatabaseService {
 
     return Response(type: 'success');
   }
+
+  Future<Response> setChristmasBadge(Chat chat, String christmasBadge) async {
+    await chatsCollection.doc(chat.id).update({
+      'christmasBadge': christmasBadge
+    });
+    return Response(type: 'success');
+  }
+
+  Future<Response> saveNotificationsToken(String token) async {
+    await usersCollection.doc(uid).update({
+      'notificationsTokens': FieldValue.arrayUnion([token])
+    });
+    return Response(type: "success");
+  }
 }
