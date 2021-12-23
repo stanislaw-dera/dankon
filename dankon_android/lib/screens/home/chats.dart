@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dankon/constants.dart';
 import 'package:dankon/models/chat.dart';
-import 'package:dankon/screens/home/christmas_bottom_sheet.dart';
 import 'package:dankon/services/database.dart';
 import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,7 +65,7 @@ class _ChatsState extends State<Chats> {
                 chat.countDays() > 0 ? "🔥${chat.countDays()} " : "";
 
             return ListTile(
-                title: Text("${title} ${chat.christmasBadge}"),
+                title: Text(title),
                 subtitle: Text("${chat.danks} danks! ${streakText}"),
                 leading: CircleAvatar(
                   backgroundImage: NetworkImage(getAccessUrlIfFacebook(image)),
@@ -76,13 +75,6 @@ class _ChatsState extends State<Chats> {
                         onPressed: () {
                           databaseService.incrementDanks(
                               chat, context.read<User?>());
-                        },
-                        onLongPress: () {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return ChristmasBottomSheet(chat: chat);
-                              });
                         },
                         child: Text('Dankon!'),
                         style: ButtonStyle(
