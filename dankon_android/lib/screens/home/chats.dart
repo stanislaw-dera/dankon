@@ -63,7 +63,7 @@ class _ChatsState extends State<Chats> {
             String image = chat.getChatImageUrl(myUid);
 
             String streakText =
-                chat.countDays() > 0 ? "🔥${chat.countDays()} " : "";
+                chat.countDays() > 0 && !chat.startNewDankstreak() ? "🔥${chat.countDays()} " : "";
 
             return ListTile(
                 title: Text(title),
