@@ -1,8 +1,6 @@
-import 'package:dankon/constants.dart';
 import 'package:dankon/screens/home/chats.dart';
-import 'package:dankon/services/authentication.dart';
-import 'package:dankon/services/database.dart';
 import 'package:dankon/services/facebook_profile_images.dart';
+import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
@@ -34,11 +32,7 @@ class HomeScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.pushNamed(context, '/settings');
                       },
-                      child: CircleAvatar(
-                        backgroundColor: kTextColor,
-                        backgroundImage: NetworkImage(getAccessUrlIfFacebook(me.photoURL.toString())),
-                        radius: 20,
-                      ),
+                      child: CachedAvatar(url: getAccessUrlIfFacebook(me.photoURL.toString()), radius: 20,)
                     ),
                     SizedBox(width: 20,),
                     Text('Dankon', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)

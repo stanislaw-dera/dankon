@@ -3,6 +3,7 @@ import 'package:dankon/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/services/database.dart';
 import 'package:dankon/services/facebook_profile_images.dart';
+import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
@@ -67,9 +68,7 @@ class _ChatsState extends State<Chats> {
             return ListTile(
                 title: Text(title),
                 subtitle: Text("${chat.danks} danks! ${streakText}"),
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(getAccessUrlIfFacebook(image)),
-                ),
+                leading: CachedAvatar(url: getAccessUrlIfFacebook(image),),
                 trailing: chat.canIDank(myUid)
                     ? OutlinedButton(
                         onPressed: () {
