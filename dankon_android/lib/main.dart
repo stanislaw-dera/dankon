@@ -33,21 +33,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _messangerKey = GlobalKey<ScaffoldMessengerState>();
-
-  late FirebaseMessaging messaging;
   @override
   void initState() {
     super.initState();
-
-    String? uid = AuthenticationService(FirebaseAuth.instance).uid();
-    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      final snackbar = SnackBar(
-        content: Text(event.notification!.title.toString()),
-      );
-
-      _messangerKey.currentState!.showSnackBar(snackbar);
-    });
   }
 
   @override
@@ -64,7 +52,6 @@ class _MyAppState extends State<MyApp> {
         )
       ],
       child: MaterialApp(
-        scaffoldMessengerKey: _messangerKey,
         debugShowCheckedModeBanner: false,
         title: 'Dankon',
         theme: kThemeData,
