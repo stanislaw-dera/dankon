@@ -64,7 +64,7 @@ class _ChatsState extends State<Chats> {
                         child: const Text('Dankon!'),
                         style: ButtonStyle(
                             foregroundColor:
-                                MaterialStateProperty.all(kTextColor)),
+                                MaterialStateProperty.all(kDarkColor)),
                       )
                     : const Padding(
                         padding: EdgeInsets.only(right: 30.0),

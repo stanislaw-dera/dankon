@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 
 const kPrimaryColor = Color(0xFFFFD500);
 const kSecondaryColor = Color(0xFFFFFDF2);
-const kTextColor = Color(0xFF2E2E2E);
+const kDarkColor = Color(0xFF2E2E2E);
 
 ThemeData kThemeData = ThemeData(
   primaryColor: kPrimaryColor,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: kPrimaryColor,
-    foregroundColor: kTextColor,
+    foregroundColor: kDarkColor,
     elevation: 0,
   ),
   appBarTheme: const AppBarTheme(
     backgroundColor: kPrimaryColor,
     elevation: 0,
     titleTextStyle: TextStyle(
-      color: kTextColor,
+      color: kDarkColor,
       fontSize: 18
     ),
     iconTheme: IconThemeData(
-      color: kTextColor
+      color: kDarkColor
     )
   )
 );

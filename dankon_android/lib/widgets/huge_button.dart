@@ -20,7 +20,7 @@ class HugeButton extends StatelessWidget {
 
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          primary: kTextColor,
+          primary: kDarkColor,
           onPrimary: Colors.white,
           padding: const EdgeInsets.all(20)
         ),
