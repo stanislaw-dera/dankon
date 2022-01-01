@@ -4,9 +4,11 @@ import 'package:dankon/services/database.dart';
 import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
+  const SearchScreen({Key? key}) : super(key: key);
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -35,13 +37,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   decoration: InputDecoration(
                       prefixIcon: IconButton(
                         color: Colors.black,
-                        icon: Icon(Icons.arrow_back),
+                        icon: const Icon(Icons.arrow_back),
                         iconSize: 20.0,
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
-                      contentPadding: EdgeInsets.only(left: 25.0),
+                      contentPadding: const EdgeInsets.only(left: 25.0),
                       hintText: 'Search by name',
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(4.0))),

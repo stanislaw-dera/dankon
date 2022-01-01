@@ -7,7 +7,7 @@ import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 class Chats extends StatefulWidget {
   const Chats({Key? key}) : super(key: key);
@@ -22,7 +22,6 @@ class _ChatsState extends State<Chats> {
   Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
       if(info.updateAvailability == UpdateAvailability.updateAvailable) {
-        print(info.updateAvailability);
         InAppUpdate.startFlexibleUpdate();
       }
     });
@@ -44,15 +43,15 @@ class _ChatsState extends State<Chats> {
       stream: _usersStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return const Text('Something went wrong');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         return ListView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> jsonData =
                 document.data()! as Map<String, dynamic>;
@@ -67,7 +66,7 @@ class _ChatsState extends State<Chats> {
 
             return ListTile(
                 title: Text(title),
-                subtitle: Text("${chat.danks} danks! ${streakText}"),
+                subtitle: Text("${chat.danks} danks! $streakText"),
                 leading: CachedAvatar(url: getAccessUrlIfFacebook(image),),
                 trailing: chat.canIDank(myUid)
                     ? OutlinedButton(
@@ -75,13 +74,13 @@ class _ChatsState extends State<Chats> {
                           databaseService.incrementDanks(
                               chat, context.read<User?>());
                         },
-                        child: Text('Dankon!'),
+                        child: const Text('Dankon!'),
                         style: ButtonStyle(
                             foregroundColor:
                                 MaterialStateProperty.all(kTextColor)),
                       )
-                    : Padding(
-                        padding: const EdgeInsets.only(right: 30.0),
+                    : const Padding(
+                        padding: EdgeInsets.only(right: 30.0),
                         child: Icon(Icons.check_circle_outline),
                       ));
           }).toList(),

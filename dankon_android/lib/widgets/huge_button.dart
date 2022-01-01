@@ -14,15 +14,15 @@ class HugeButton extends StatelessWidget {
 
         onPressed: onPressed,
 
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
 
-        label: Text(text, style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20),),
+        label: Text(text, style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 20),),
 
         style: ElevatedButton.styleFrom(
           elevation: 0,
           primary: kTextColor,
           onPrimary: Colors.white,
-          padding: EdgeInsets.all(20)
+          padding: const EdgeInsets.all(20)
         ),
 
 

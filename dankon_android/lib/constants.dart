@@ -6,12 +6,12 @@ const kTextColor = Color(0xFF2E2E2E);
 
 ThemeData kThemeData = ThemeData(
   primaryColor: kPrimaryColor,
-  floatingActionButtonTheme: FloatingActionButtonThemeData(
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: kPrimaryColor,
     foregroundColor: kTextColor,
     elevation: 0,
   ),
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: kPrimaryColor,
     elevation: 0,
     titleTextStyle: TextStyle(

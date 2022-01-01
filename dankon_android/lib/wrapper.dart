@@ -4,7 +4,8 @@ import 'package:dankon/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'firebase_options.dart';
 
 class Wrapper extends StatefulWidget {

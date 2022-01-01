@@ -7,7 +7,7 @@ String getAccessUrlIfFacebook(String url) {
   );
 
   if(regExp.hasMatch(url)) {
-    return "${url}?access_token=${dotenv.env["FB_ACCESS_TOKEN"]}";
+    return "$url?access_token=${dotenv.env["FB_ACCESS_TOKEN"]}";
   }
 
   return url;

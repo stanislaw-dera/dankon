@@ -22,7 +22,7 @@ void main() async {
   );
   await dotenv.load(fileName: ".env");
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -58,8 +58,8 @@ class _MyAppState extends State<MyApp> {
         initialRoute: '/',
         routes: {
           '/': (context) => const Wrapper(),
-          '/search': (context) => SearchScreen(),
-          '/settings': (context) => SettingsScreen()
+          '/search': (context) => const SearchScreen(),
+          '/settings': (context) => const SettingsScreen()
         },
       ),
     );

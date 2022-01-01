@@ -3,7 +3,7 @@ import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pushNamed('/search');
         },
-        child: Icon(Icons.person_add_alt_1),
+        child: const Icon(Icons.person_add_alt_1),
       ),
       body: SafeArea(
           child: Column(
@@ -34,13 +34,13 @@ class HomeScreen extends StatelessWidget {
                       },
                       child: CachedAvatar(url: getAccessUrlIfFacebook(me.photoURL.toString()), radius: 20,)
                     ),
-                    SizedBox(width: 20,),
-                    Text('Dankon', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
+                    const SizedBox(width: 20,),
+                    const Text('Dankon', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
                   ],
                 ),
               ),
-              SizedBox(height: 10,),
-              Expanded(child: Chats()),
+              const SizedBox(height: 10,),
+              const Expanded(child: Chats()),
             ],
           )
       ),

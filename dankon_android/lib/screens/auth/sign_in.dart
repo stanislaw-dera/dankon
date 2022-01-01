@@ -1,9 +1,7 @@
 import 'package:dankon/constants.dart';
 import 'package:dankon/services/authentication.dart';
-import 'package:dankon/widgets/huge_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class SignIn extends StatefulWidget {
@@ -22,7 +20,7 @@ class _SignInState extends State<SignIn> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: double.infinity,),
+          const SizedBox(width: double.infinity,),
           const Text(
             ":Dankon",
             style: TextStyle(
