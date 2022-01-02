@@ -1,5 +1,5 @@
 import 'package:dankon/screens/auth/sign_in.dart';
-import 'package:dankon/screens/home/home.dart';
+import 'package:dankon/screens/main/main_view.dart';
 import 'package:dankon/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,7 +29,7 @@ class _WrapperState extends State<Wrapper> {
             .saveNotificationsToken(value.toString());
       });
 
-      return const HomeScreen();
+      return const MainView();
     }
   }
 }

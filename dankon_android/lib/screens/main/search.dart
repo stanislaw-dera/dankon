@@ -63,10 +63,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 Expanded(
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                            .collection('users')
-                            .where("search", arrayContains: name)
-                            .limit(5)
-                            .snapshots(),
+                        .collection('users')
+                        .where("search", arrayContains: name)
+                        .limit(5)
+                        .snapshots(),
                     builder:
                         (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasError) return Text('Error: ${snapshot.error}');
@@ -76,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         default:
                           return ListView(
                             children:
-                                snapshot.data!.docs.map((DocumentSnapshot document) {
+                            snapshot.data!.docs.map((DocumentSnapshot document) {
                               return Card(
                                 child: ListTile(
                                   title: Text(document['name']),
@@ -84,7 +84,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   trailing: IconButton(icon: Icon(Icons.person_add, color: Theme.of(context).primaryColor,), onPressed: () async {
                                     String msg = await databaseService.createChat(TheUser(uid: document['uid'], name: document['name'], urlAvatar: document['urlAvatar']));
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-                                    },),
+                                  },),
                                 ),
                               );
                             }).toList(),
