@@ -17,8 +17,9 @@ class _MainViewState extends State<MainView> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            bottom: const TabBar(
-              tabs: [
+            bottom: TabBar(
+              indicatorColor: Theme.of(context).primaryColor,
+              tabs: const [
                 Tab(icon: Icon(Icons.home)),
                 Tab(icon: Icon(Icons.chat)),
                 Tab(icon: Icon(Icons.apps_rounded)),
