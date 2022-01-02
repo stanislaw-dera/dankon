@@ -1,7 +1,6 @@
 import 'package:dankon/constants.dart';
 import 'package:dankon/firebase_options.dart';
-import 'package:dankon/screens/home/search.dart';
-import 'package:dankon/screens/home/settings.dart';
+import 'package:dankon/screens/main/search.dart';
 import 'package:dankon/services/authentication.dart';
 import 'package:dankon/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +58,6 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/': (context) => const Wrapper(),
           '/search': (context) => const SearchScreen(),
-          '/settings': (context) => const SettingsScreen()
         },
       ),
     );

@@ -12,14 +12,12 @@ ThemeData kThemeData = ThemeData(
     elevation: 0,
   ),
   appBarTheme: const AppBarTheme(
-    backgroundColor: kPrimaryColor,
+    backgroundColor: kDarkColor,
+    centerTitle: true,
     elevation: 0,
-    titleTextStyle: TextStyle(
-      color: kDarkColor,
-      fontSize: 18
-    ),
-    iconTheme: IconThemeData(
-      color: kDarkColor
-    )
+  ),
+  tabBarTheme: const TabBarTheme(
+    unselectedLabelColor: Colors.white70,
+    labelColor: kPrimaryColor,
   )
 );
