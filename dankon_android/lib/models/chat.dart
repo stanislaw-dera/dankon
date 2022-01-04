@@ -66,7 +66,7 @@ class Chat {
   }
 
   bool startNewDankstreak() {
-    DateTime from = DateTime.utc(lastDankstreakTime.year,
+    DateTime from = DateTime(lastDankstreakTime.year,
         lastDankstreakTime.month, lastDankstreakTime.day);
     int difference = DateTime.now().difference(from).inDays;
 
@@ -78,7 +78,7 @@ class Chat {
   }
 
   int countDays() {
-    DateTime from = DateTime.utc(
+    DateTime from = DateTime(
         dankstreakFrom.year, dankstreakFrom.month, dankstreakFrom.day);
     return lastDankstreakTime.difference(from).inDays;
   }
