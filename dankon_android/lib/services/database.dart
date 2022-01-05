@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String? uid;
-  DatabaseService({this.uid});
+  DatabaseService({required this.uid});
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference chatsCollection =
@@ -64,11 +64,11 @@ class DatabaseService {
     return "Created a chat";
   }
 
-  Future<Response> incrementDanks(Chat chat, User? me) async {
+  Future<Response> incrementDanks(Chat chat, String uid) async {
 
     Map<String, dynamic> updateData = {
       'danks': FieldValue.increment(1),
-      'lastDankAuthor': me!.uid,
+      'lastDankAuthor': uid,
       'lastDankTime': FieldValue.serverTimestamp()
     };
 

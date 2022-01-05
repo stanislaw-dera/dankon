@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dankon/models/response.dart';
 import 'package:dankon/models/the_user.dart';
+import 'package:dankon/services/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 List<TheUser> jsonToListOfUsers(List json) {
   List<TheUser> list = [];
@@ -81,6 +84,10 @@ class Chat {
     DateTime from = DateTime.utc(
         dankstreakFrom.year, dankstreakFrom.month, dankstreakFrom.day);
     return lastDankstreakTime.difference(from).inDays;
+  }
+
+  Future<Response> incrementDanks(String uid) {
+    return DatabaseService(uid: uid).incrementDanks(this, uid);
   }
 
   Chat(
