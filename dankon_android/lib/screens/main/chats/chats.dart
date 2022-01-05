@@ -24,6 +24,9 @@ class ChatsPage extends StatelessWidget {
           child: ChatTile(
               title: title,
               imageUrl: image,
+              onPressed: () {
+                Navigator.pushNamed(context, "/chat", arguments: chat);
+              },
           ),
         );
       }).toList(),
