@@ -3,7 +3,6 @@ import 'package:dankon/models/response.dart';
 import 'package:dankon/models/the_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:characters/characters.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String? uid;

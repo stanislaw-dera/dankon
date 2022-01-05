@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dankon/constants.dart';
 import 'package:dankon/models/chat.dart';
-import 'package:dankon/services/database.dart';
-import 'package:dankon/services/facebook_profile_images.dart';
-import 'package:dankon/widgets/cached_avatar.dart';
+import 'package:dankon/widgets/chat_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +15,6 @@ class DanksPage extends StatefulWidget {
 class _DanksPageState extends State<DanksPage> {
   @override
   Widget build(BuildContext context) {
-
     String myUid = context.read<User?>()!.uid;
     List<Chat>? chats = context.watch<List<Chat>?>();
 
@@ -29,32 +25,30 @@ class _DanksPageState extends State<DanksPage> {
             String title = chat.getChatName(myUid);
             String image = chat.getChatImageUrl(myUid);
 
-            String streakText =
-                chat.countDays() > 0 && !chat.startNewDankstreak() ? "🔥${chat.countDays()} " : "";
+              String subtitle =
+                  chat.countDays() > 0 && !chat.startNewDankstreak()
+                      ? "${chat.danks} danks! 🔥${chat.countDays()} "
+                      : "${chat.danks} danks!";
 
-            print(title);
-            print("\t Show? ${!chat.startNewDankstreak() ? "tak" : "nie"}");
-            print("\t Days? ${chat.countDays().toString()}");
-
-            return ListTile(
-                title: Text(title),
-                subtitle: Text("${chat.danks} danks! $streakText"),
-                leading: CachedAvatar(url: getAccessUrlIfFacebook(image),),
-                trailing: chat.canIDank(myUid)
-                    ? OutlinedButton(
-                        onPressed: () {
-                          chat.incrementDanks(myUid);
-                        },
-                        child: const Text('Dankon!'),
-                        style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all(kDarkColor)),
-                      )
-                    : const Padding(
-                        padding: EdgeInsets.only(right: 30.0),
-                        child: Icon(Icons.check_circle_outline),
-                      ));
-          }).toList(),
-        );
+              return ChatTile(
+                  subtitle: subtitle,
+                  title: title,
+                  imageUrl: image,
+                  trailing: chat.canIDank(myUid)
+                      ? OutlinedButton(
+                          onPressed: () {
+                            chat.incrementDanks(myUid);
+                          },
+                          child: const Text('Dankon!'),
+                          style: ButtonStyle(
+                              foregroundColor:
+                                  MaterialStateProperty.all(kDarkColor)),
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.only(right: 30.0),
+                          child: Icon(Icons.check_circle_outline),
+                        ));
+            }).toList(),
+          );
   }
 }

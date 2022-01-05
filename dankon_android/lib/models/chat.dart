@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dankon/models/response.dart';
 import 'package:dankon/models/the_user.dart';
 import 'package:dankon/services/database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 List<TheUser> jsonToListOfUsers(List json) {
   List<TheUser> list = [];
