@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dankon/utils/timestamp_to_datetime.dart';
 import 'package:dankon/models/response.dart';
 import 'package:dankon/models/the_user.dart';
 import 'package:dankon/services/database.dart';
@@ -11,16 +11,6 @@ List<TheUser> jsonToListOfUsers(List json) {
   }
 
   return list;
-}
-
-DateTime timestampToDateTime(dynamic timestamp) {
-  if (timestamp == null) {
-    return DateTime(2000);
-  }
-
-  Timestamp t = timestamp;
-  DateTime d = t.toDate();
-  return d;
 }
 
 class Chat {
