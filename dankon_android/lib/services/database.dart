@@ -1,4 +1,5 @@
 import 'package:dankon/models/chat.dart';
+import 'package:dankon/models/message.dart';
 import 'package:dankon/models/response.dart';
 import 'package:dankon/models/the_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +12,10 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('users');
   final CollectionReference chatsCollection =
       FirebaseFirestore.instance.collection('chats');
+
+  CollectionReference getMessagesCollection(String chatId) {
+    return FirebaseFirestore.instance.collection("chats/$chatId/messages");
+  }
 
   Future<void> createUser(TheUser theUser) async {
     var userJSON = theUser.toJson();
@@ -99,6 +104,15 @@ class DatabaseService {
     await usersCollection.doc(uid).update({
       'notificationsTokens': FieldValue.arrayUnion([token])
     });
+    return Response(type: "success");
+  }
+
+  Future<Response> sendMessage(Message message, String chatId) async {
+    Map<String, dynamic> json = message.toJson();
+    json["time"] = FieldValue.serverTimestamp();
+
+    await getMessagesCollection(chatId).add(json);
+
     return Response(type: "success");
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dankon/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/message.dart';
+import 'package:dankon/services/database.dart';
 import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:dankon/widgets/message_bubble.dart';
 import 'package:dankon/widgets/message_input.dart';
@@ -72,7 +73,7 @@ class _ChatViewState extends State<ChatView> {
                           ),
                         ),
                 ),
-                const MessageInput()
+                MessageInput(chatId: chat.id, databaseService: DatabaseService(uid: myUid),)
               ],
             );
           },
