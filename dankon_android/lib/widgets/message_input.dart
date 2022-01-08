@@ -1,7 +1,8 @@
-import 'package:dankon/constants.dart';
+import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
 import 'package:dankon/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MessageInput extends StatefulWidget {
   const MessageInput({Key? key, required this.chatId, required this.databaseService}) : super(key: key);
@@ -24,13 +25,15 @@ class _MessageInputState extends State<MessageInput> {
 
   @override
   Widget build(BuildContext context) {
+
+    ChatTheme chatTheme = context.watch<ChatTheme>();
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
         vertical: 10,
       ),
       decoration: BoxDecoration(
-        color: kSecondaryColor,
         boxShadow: [
           BoxShadow(
             offset: const Offset(0, 4),
@@ -49,29 +52,27 @@ class _MessageInputState extends State<MessageInput> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
-                  color: kPrimaryColor.withOpacity(0.2),
-
+                  color: chatTheme.secondaryColor,
                 ),
                 child: Row(
                   children: [
                     Icon(
                       Icons.sentiment_satisfied_alt_outlined,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color!
-                          .withOpacity(0.64),
+                      color: chatTheme.textColor
                     ),
                     const SizedBox(width: 20 / 4),
                     Expanded(
                       child: TextField(
                         controller: messageController,
                         keyboardType: TextInputType.multiline,
+                        style: TextStyle(color: chatTheme.textColor),
                         maxLines: 4,
                         minLines: 1,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: "Type a message",
                           border: InputBorder.none,
+                          hintStyle: TextStyle(color: chatTheme.textColor.withOpacity(0.5)),
+
                         ),
                       ),
                     ),
@@ -80,7 +81,7 @@ class _MessageInputState extends State<MessageInput> {
               ),
             ),
             // const SizedBox(width: 20),
-            IconButton(icon: const Icon(Icons.send), padding: EdgeInsets.zero, onPressed: () {
+            IconButton(icon: Icon(Icons.send, color: chatTheme.buttonsColor,), padding: EdgeInsets.zero, onPressed: () {
               widget.databaseService.sendMessage(Message(time: DateTime.now(), author: widget.databaseService.uid.toString(), content: messageController.text), widget.chatId);
               messageController.clear();
             },)

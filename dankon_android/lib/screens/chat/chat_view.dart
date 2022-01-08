@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dankon/constants.dart';
+import 'package:dankon/constants/chat_themes.dart';
 import 'package:dankon/models/chat.dart';
+import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
 import 'package:dankon/services/database.dart';
 import 'package:dankon/widgets/cached_avatar.dart';
@@ -18,6 +19,15 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
+
+  ChatTheme chatTheme = getChatThemeById("dark-forest-green");
+  
+  void changeTheme(String id) {
+    setState(() {
+      chatTheme = getChatThemeById(id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     String myUid = context.read<User?>()!.uid;
@@ -28,65 +38,68 @@ class _ChatViewState extends State<ChatView> {
         .orderBy("time", descending: true)
         .snapshots();
 
-    return Scaffold(
-        backgroundColor: kSecondaryColor,
-        appBar: buildAppBar(chat, myUid),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: messagesStream,
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return const Text('Something went wrong');
-            }
+    return Provider<ChatTheme>.value(
+      value: chatTheme,
+      child: Scaffold(
+          backgroundColor: chatTheme.backgroundColor,
+          appBar: buildAppBar(chat, myUid, chatTheme),
+          body: StreamBuilder<QuerySnapshot>(
+            stream: messagesStream,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Something went wrong');
+              }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-            List<Message> messages = snapshot.data!.docs.map((doc) {
-              Map<String, dynamic> jsonData =
-                  doc.data() as Map<String, dynamic>;
-              return Message.fromJson(jsonData);
-            }).toList();
+              List<Message> messages = snapshot.data!.docs.map((doc) {
+                Map<String, dynamic> jsonData =
+                    doc.data() as Map<String, dynamic>;
+                return Message.fromJson(jsonData);
+              }).toList();
 
-            return Column(
-              children: [
-                Expanded(
-                  child: messages.isEmpty
-                      ? ChatWelcome(
-                          photoUrl: chat.getChatImageUrl(myUid),
-                          title: chat.getChatName(myUid))
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: ListView.builder(
-                            reverse: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: messages.length,
-                            itemBuilder: (context, index) {
-                              return MessageBuble(
-                                msg: messages[index],
-                                byMe: messages[index].author == myUid,
-                              );
-                            },
+              return Column(
+                children: [
+                  Expanded(
+                    child: messages.isEmpty
+                        ? ChatWelcome(
+                            photoUrl: chat.getChatImageUrl(myUid),
+                            title: chat.getChatName(myUid))
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: ListView.builder(
+                              reverse: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: messages.length,
+                              itemBuilder: (context, index) {
+                                return MessageBuble(
+                                  msg: messages[index],
+                                  byMe: messages[index].author == myUid,
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                ),
-                MessageInput(chatId: chat.id, databaseService: DatabaseService(uid: myUid),)
-              ],
-            );
-          },
-        ));
+                  ),
+                  MessageInput(chatId: chat.id, databaseService: DatabaseService(uid: myUid),)
+                ],
+              );
+            },
+          )),
+    );
   }
 }
 
-AppBar buildAppBar(Chat chat, String myUid) {
+AppBar buildAppBar(Chat chat, String myUid, ChatTheme chatTheme) {
   return AppBar(
     centerTitle: false,
     titleSpacing: 0,
-    backgroundColor: kPrimaryColor,
-    foregroundColor: kDarkColor,
+    backgroundColor: chatTheme.secondaryColor,
+    foregroundColor: chatTheme.textColor,
     title: Row(
       children: [
         CachedAvatar(
@@ -112,6 +125,9 @@ class ChatWelcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    ChatTheme chatTheme = context.read<ChatTheme>();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -125,12 +141,12 @@ class ChatWelcome extends StatelessWidget {
         ),
         Text(
           title,
-          style: const TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20, color: chatTheme.textColor),
         ),
         const SizedBox(
           height: 5,
         ),
-        Text("Your chat with $title starts here"),
+        Text("Your chat with $title starts here", style: TextStyle(color: chatTheme.textColor),),
       ],
     );
   }

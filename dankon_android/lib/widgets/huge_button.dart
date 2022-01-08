@@ -1,4 +1,4 @@
-import 'package:dankon/constants.dart';
+import 'package:dankon/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class HugeButton extends StatelessWidget {
@@ -24,8 +24,6 @@ class HugeButton extends StatelessWidget {
           onPrimary: Colors.white,
           padding: const EdgeInsets.all(20)
         ),
-
-
       ),
     );
   }

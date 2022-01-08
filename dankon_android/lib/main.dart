@@ -1,4 +1,4 @@
-import 'package:dankon/constants.dart';
+import 'package:dankon/constants/constants.dart';
 import 'package:dankon/firebase_options.dart';
 import 'package:dankon/screens/chat/chat_view.dart';
 import 'package:dankon/screens/main/search.dart';

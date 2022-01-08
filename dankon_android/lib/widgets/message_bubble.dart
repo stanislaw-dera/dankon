@@ -1,7 +1,8 @@
-import 'package:dankon/constants.dart';
+import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 class MessageBuble extends StatelessWidget {
   const MessageBuble({Key? key, required this.msg, required this.byMe}) : super(key: key);
@@ -10,6 +11,9 @@ class MessageBuble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    ChatTheme chatTheme = context.watch<ChatTheme>();
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0, top: 10),
       child: Row(
@@ -22,14 +26,14 @@ class MessageBuble extends StatelessWidget {
               vertical: 10,
             ),
             decoration: BoxDecoration(
-              color: byMe ? kPrimaryColor : kPrimaryColor.withOpacity(0.2),
+              color: byMe ? chatTheme.myMessageBackgroundColor : chatTheme.messageBackgroundColor,
               borderRadius: BorderRadius.circular(30),
             ),
             child: Text(
               msg.content,
-              style: const TextStyle(
-                color: kDarkColor,
-                fontSize: 15
+              style: TextStyle(
+                color: byMe ? chatTheme.myMessageTextColor : chatTheme.messageTextColor,
+                fontSize: 16
               ),
             ),
           ),
