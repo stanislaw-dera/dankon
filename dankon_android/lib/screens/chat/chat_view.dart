@@ -18,7 +18,7 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  ChatTheme chatTheme = getChatThemeById("dark-forest-green");
+  ChatTheme chatTheme = getChatThemeById("night-mountains-blue");
 
   void changeTheme(String id) {
     setState(() {

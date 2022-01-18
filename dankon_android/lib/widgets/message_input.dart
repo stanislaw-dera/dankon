@@ -56,11 +56,6 @@ class _MessageInputState extends State<MessageInput> {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.sentiment_satisfied_alt_outlined,
-                      color: chatTheme.textColor
-                    ),
-                    const SizedBox(width: 20 / 4),
                     Expanded(
                       child: TextField(
                         controller: messageController,

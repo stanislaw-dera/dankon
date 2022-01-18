@@ -2,7 +2,9 @@ import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MessageBuble extends StatelessWidget {
   const MessageBuble({Key? key, required this.msg, required this.byMe}) : super(key: key);
@@ -29,13 +31,25 @@ class MessageBuble extends StatelessWidget {
               color: byMe ? chatTheme.myMessageBackgroundColor : chatTheme.messageBackgroundColor,
               borderRadius: BorderRadius.circular(30),
             ),
-            child: Text(
-              msg.content,
+            child: Linkify(
+              text: msg.content,
               style: TextStyle(
-                color: byMe ? chatTheme.myMessageTextColor : chatTheme.messageTextColor,
-                fontSize: 16
+                  color: byMe ? chatTheme.myMessageTextColor : chatTheme.messageTextColor,
+                  fontSize: 16
               ),
-            ),
+              linkStyle: TextStyle(
+                  color: byMe ? chatTheme.myMessageTextColor : chatTheme.messageTextColor,
+                  fontSize: 16,
+                  decoration: TextDecoration.underline
+              ),
+              onOpen: (link) async {
+                if (await canLaunch(link.url)) {
+                  await launch(link.url);
+                } else {
+                  throw 'Could not launch $link';
+                }
+              },
+            )
           ),
         )],
       ),
