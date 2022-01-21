@@ -28,6 +28,7 @@ class SettingsScreen extends StatelessWidget {
               leading: const Icon(Icons.logout),
               onTap: () {
                 context.read<AuthenticationService>().signOut();
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
