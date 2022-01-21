@@ -2,6 +2,7 @@ import 'package:dankon/constants/constants.dart';
 import 'package:dankon/firebase_options.dart';
 import 'package:dankon/screens/chat/chat_view.dart';
 import 'package:dankon/screens/main/search.dart';
+import 'package:dankon/screens/settings/settings.dart';
 import 'package:dankon/services/authentication.dart';
 import 'package:dankon/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,6 +61,7 @@ class _MyAppState extends State<MyApp> {
           '/': (context) => const Wrapper(),
           '/search': (context) => const SearchScreen(),
           '/chat': (context) => const ChatView(),
+          '/settings': (context) => const SettingsScreen(),
         },
       ),
     );
