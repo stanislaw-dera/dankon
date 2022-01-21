@@ -61,10 +61,9 @@ exports.sendChatNotification = functions.firestore
 
     const messageData = snap.data();
 
-    const chatDoc = await db
-      .collection("chats")
-      .doc(context.params.chatId)
-      .get();
+    const chatDocRef = db.collection("chats").doc(context.params.chatId);
+
+    const chatDoc = await chatDocRef.get();
     const chatData = chatDoc.data();
 
     // get notification reciver uid
@@ -93,15 +92,32 @@ exports.sendChatNotification = functions.firestore
       return;
     }
 
+    // chat setup - create notificationId
+    const notificationId = chatData.notificationId ? chatData.notificationId : Date.now();
+    if (chatData.notificationId == undefined) {
+      functions.logger.log("Generated new notificationId", notificationId)
+      await chatDocRef.update({
+        notificationId: notificationId
+      })
+    }
+
     // prepare payload
     const payload = {
-      notification: {
+      data: {
         title: senderName,
-        body: messageData.content,
+        body: "New messages",
+        id: notificationId,
       },
     };
 
     // sent notification
     const messaging = admin.messaging();
     await messaging.sendToDevice(reciverTokens, payload);
+
+    // update chat
+    chatDocRef.update({
+      lastMessageTime: messageData.time,
+      lastMessageAuthor: messageData.author,
+      lastMessageContent: messageData.content
+    })
   });
