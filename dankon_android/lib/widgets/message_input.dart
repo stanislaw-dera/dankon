@@ -77,8 +77,10 @@ class _MessageInputState extends State<MessageInput> {
             ),
             // const SizedBox(width: 20),
             IconButton(icon: Icon(Icons.send, color: chatTheme.buttonsColor,), padding: EdgeInsets.zero, onPressed: () {
-              widget.databaseService.sendMessage(Message(time: DateTime.now(), author: widget.databaseService.uid.toString(), content: messageController.text), widget.chatId);
-              messageController.clear();
+              if(messageController.text.length > 0) {
+                widget.databaseService.sendMessage(Message(time: DateTime.now(), author: widget.databaseService.uid.toString(), content: messageController.text), widget.chatId);
+                messageController.clear();
+              }
             },)
           ],
         ),

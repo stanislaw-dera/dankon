@@ -15,7 +15,7 @@ class ChatTile extends StatelessWidget {
     return ListTile(
         title: Text(title),
         onTap: onPressed,
-        subtitle: subtitle != null ? Text(subtitle!) : null,
+        subtitle: subtitle != null ? Text(subtitle!, overflow: TextOverflow.ellipsis, maxLines: 1,) : null,
         leading: CachedAvatar(url: getAccessUrlIfFacebook(imageUrl), radius: 22,),
         trailing: trailing
     );

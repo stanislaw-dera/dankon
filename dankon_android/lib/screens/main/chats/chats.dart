@@ -12,24 +12,31 @@ class ChatsPage extends StatelessWidget {
     String myUid = context.read<User?>()!.uid;
     List<Chat>? chats = context.watch<List<Chat>?>();
 
-    return chats == null ? const Center(child: CircularProgressIndicator(),) : ListView(
-      physics: const BouncingScrollPhysics(),
-      children: chats.map((Chat chat) {
+    if(chats == null) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      chats.sort((a,b) => b.lastMessageTime.compareTo(a.lastMessageTime));
+      return ListView(
+        physics: const BouncingScrollPhysics(),
+        children: chats.map((Chat chat) {
 
-        String title = chat.getChatName(myUid);
-        String image = chat.getChatImageUrl(myUid);
+          String title = chat.getChatName(myUid);
+          String image = chat.getChatImageUrl(myUid);
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: ChatTile(
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: ChatTile(
               title: title,
+              subtitle: chat.lastMessageContent != "" ? "${chat.lastMessageAuthor}: ${chat.lastMessageContent}" : null,
               imageUrl: image,
               onPressed: () {
                 Navigator.pushNamed(context, "/chat", arguments: chat);
               },
-          ),
-        );
-      }).toList(),
-    );
+            ),
+          );
+        }).toList(),
+      );
+    }
+
   }
 }
