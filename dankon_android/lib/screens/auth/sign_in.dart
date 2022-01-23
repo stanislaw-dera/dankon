@@ -1,4 +1,4 @@
-import 'package:dankon/constants.dart';
+import 'package:dankon/constants/constants.dart';
 import 'package:dankon/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

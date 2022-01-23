@@ -1,17 +1,21 @@
 import 'package:dankon/models/chat.dart';
+import 'package:dankon/models/message.dart';
 import 'package:dankon/models/response.dart';
 import 'package:dankon/models/the_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:characters/characters.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String? uid;
-  DatabaseService({this.uid});
+  DatabaseService({required this.uid});
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
   final CollectionReference chatsCollection =
       FirebaseFirestore.instance.collection('chats');
+
+  CollectionReference getMessagesCollection(String chatId) {
+    return FirebaseFirestore.instance.collection("chats/$chatId/messages");
+  }
 
   Future<void> createUser(TheUser theUser) async {
     var userJSON = theUser.toJson();
@@ -64,11 +68,11 @@ class DatabaseService {
     return "Created a chat";
   }
 
-  Future<Response> incrementDanks(Chat chat, User? me) async {
+  Future<Response> incrementDanks(Chat chat, String uid) async {
 
     Map<String, dynamic> updateData = {
       'danks': FieldValue.increment(1),
-      'lastDankAuthor': me!.uid,
+      'lastDankAuthor': uid,
       'lastDankTime': FieldValue.serverTimestamp()
     };
 
@@ -100,6 +104,15 @@ class DatabaseService {
     await usersCollection.doc(uid).update({
       'notificationsTokens': FieldValue.arrayUnion([token])
     });
+    return Response(type: "success");
+  }
+
+  Future<Response> sendMessage(Message message, String chatId) async {
+    Map<String, dynamic> json = message.toJson();
+    json["time"] = FieldValue.serverTimestamp();
+
+    await getMessagesCollection(chatId).add(json);
+
     return Response(type: "success");
   }
 }

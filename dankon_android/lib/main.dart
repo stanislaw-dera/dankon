@@ -1,7 +1,10 @@
-import 'package:dankon/constants.dart';
+import 'package:dankon/constants/constants.dart';
 import 'package:dankon/firebase_options.dart';
+import 'package:dankon/screens/chat/chat_view.dart';
 import 'package:dankon/screens/main/search.dart';
+import 'package:dankon/screens/settings/settings.dart';
 import 'package:dankon/services/authentication.dart';
+import 'package:dankon/services/notifications.dart';
 import 'package:dankon/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +15,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  if(message.data["type"] == "CHAT/NEW_MESSAGE") NotificationsService.handleChatNotification(message.data);
+}
+
+Future<void> _notificationHandler(RemoteMessage message) async {
+  if(message.data["type"] == "CHAT/NEW_MESSAGE") NotificationsService.handleChatNotification(message.data);
 }
 
 void main() async {
@@ -20,7 +28,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load(fileName: ".env");
+  NotificationsService.initialize();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen(_notificationHandler);
   runApp(const MyApp());
 }
 
@@ -58,6 +68,8 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/': (context) => const Wrapper(),
           '/search': (context) => const SearchScreen(),
+          '/chat': (context) => const ChatView(),
+          '/settings': (context) => const SettingsScreen(),
         },
       ),
     );

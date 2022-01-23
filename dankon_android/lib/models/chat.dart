@@ -1,5 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dankon/utils/timestamp_to_datetime.dart';
+import 'package:dankon/models/response.dart';
 import 'package:dankon/models/the_user.dart';
+import 'package:dankon/services/database.dart';
 
 List<TheUser> jsonToListOfUsers(List json) {
   List<TheUser> list = [];
@@ -9,16 +11,6 @@ List<TheUser> jsonToListOfUsers(List json) {
   }
 
   return list;
-}
-
-DateTime timestampToDateTime(dynamic timestamp) {
-  if (timestamp == null) {
-    return DateTime(2000);
-  }
-
-  Timestamp t = timestamp;
-  DateTime d = t.toDate();
-  return d;
 }
 
 class Chat {
@@ -32,6 +24,10 @@ class Chat {
   final DateTime lastDankTime;
   final DateTime lastDankstreakTime;
   final DateTime dankstreakFrom;
+
+  final DateTime lastMessageTime;
+  final String lastMessageAuthor;
+  final String lastMessageContent;
 
   bool canIDank(String myUid) {
     if (lastDankAuthor != myUid) {
@@ -83,6 +79,10 @@ class Chat {
     return lastDankstreakTime.difference(from).inDays;
   }
 
+  Future<Response> incrementDanks(String uid) {
+    return DatabaseService(uid: uid).incrementDanks(this, uid);
+  }
+
   Chat(
       this.chatroomName,
       this.allParticipants,
@@ -92,7 +92,10 @@ class Chat {
       this.dankstreakFrom,
       this.lastDankTime,
       this.id,
-      this.lastDankstreakTime);
+      this.lastDankstreakTime,
+      this.lastMessageTime,
+      this.lastMessageAuthor,
+      this.lastMessageContent);
 
   Map<String, dynamic> toJson() => {
         'chatroomName': chatroomName,
@@ -114,5 +117,8 @@ class Chat {
         lastDankAuthor = json["lastDankAuthor"] ?? "",
         lastDankTime = timestampToDateTime(json["lastDankTime"]),
         lastDankstreakTime = timestampToDateTime(json["lastDankstreakTime"]),
-        dankstreakFrom = timestampToDateTime(json["dankstreakFrom"]);
+        dankstreakFrom = timestampToDateTime(json["dankstreakFrom"]),
+        lastMessageTime = timestampToDateTime(json["lastMessageTime"]),
+        lastMessageAuthor = json["lastMessageAuthor"] ?? "",
+        lastMessageContent = json["lastMessageContent"] ?? "";
 }
