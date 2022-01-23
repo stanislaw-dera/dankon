@@ -47,6 +47,7 @@ dependencies:
   paginate_firestore: ^1.0.3
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.18
+  flutter_local_notifications: ^9.2.0
 
 dev_dependencies:
   flutter_test:
