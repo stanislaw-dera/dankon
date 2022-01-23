@@ -43,16 +43,6 @@ class _SignInState extends State<SignIn> {
               context.read<AuthenticationService>().signInWithGoogle();
             },
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          SignInButton(
-            Buttons.FacebookNew,
-            onPressed: () {
-              context.read<AuthenticationService>().signInWithFacebook();
-            },
-          ),
-
         ],
       ),
     );

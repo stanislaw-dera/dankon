@@ -3,7 +3,6 @@ import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/screens/main/chats/chats.dart';
 import 'package:dankon/screens/main/danks/danks.dart';
-import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +64,7 @@ class _MainViewState extends State<MainView> {
                             },
                             child: CircleAvatar(
                               backgroundColor: kDarkColor,
-                              backgroundImage: NetworkImage(getAccessUrlIfFacebook(me.photoURL.toString())),
+                              backgroundImage: NetworkImage(me.photoURL.toString()),
                               radius: 20,
                             ),
                           ),

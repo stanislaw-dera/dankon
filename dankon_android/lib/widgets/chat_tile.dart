@@ -1,4 +1,3 @@
-import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +15,7 @@ class ChatTile extends StatelessWidget {
         title: Text(title),
         onTap: onPressed,
         subtitle: subtitle != null ? Text(subtitle!, overflow: TextOverflow.ellipsis, maxLines: 1,) : null,
-        leading: CachedAvatar(url: getAccessUrlIfFacebook(imageUrl), radius: 22,),
+        leading: CachedAvatar(url: imageUrl, radius: 22,),
         trailing: trailing
     );
   }

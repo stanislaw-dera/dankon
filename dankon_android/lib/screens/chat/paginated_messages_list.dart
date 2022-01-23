@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
-import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:dankon/widgets/message_bubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +37,7 @@ class PaginatedMessagesList extends StatelessWidget {
 
         return MessageBuble(byMe: message.author == myUid, msg: message,);
       },
-      onEmpty: ChatWelcome(photoUrl: getAccessUrlIfFacebook(chat.getChatImageUrl(myUid)), title: chat.getChatName(myUid)),
+      onEmpty: ChatWelcome(photoUrl: chat.getChatImageUrl(myUid), title: chat.getChatName(myUid)),
       initialLoader: Center(child: CircularProgressIndicator(color: chatTheme.secondaryColor,)),
       bottomLoader: Center(child: CircularProgressIndicator(color: chatTheme.secondaryColor,)),
     );

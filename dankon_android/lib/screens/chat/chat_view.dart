@@ -2,7 +2,6 @@ import 'package:dankon/constants/chat_themes.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/screens/chat/paginated_messages_list.dart';
-import 'package:dankon/services/facebook_profile_images.dart';
 import 'package:dankon/services/database.dart';
 import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:dankon/widgets/message_input.dart';
@@ -63,7 +62,7 @@ AppBar buildAppBar(Chat chat, String myUid, ChatTheme chatTheme) {
     title: Row(
       children: [
         CachedAvatar(
-          url: getAccessUrlIfFacebook(chat.getChatImageUrl(myUid)),
+          url: chat.getChatImageUrl(myUid),
           radius: 15,
         ),
         const SizedBox(
@@ -91,7 +90,7 @@ class ChatWelcome extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CachedAvatar(
-          url: getAccessUrlIfFacebook(photoUrl),
+          url: photoUrl,
           radius: 30,
         ),
         const SizedBox(
