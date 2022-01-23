@@ -77,7 +77,7 @@ class DatabaseService {
     };
 
     // update lastDankstreakTime
-    DateTime last = DateTime.utc(chat.lastDankTime.year, chat.lastDankTime.month, chat.lastDankTime.day);
+    DateTime last = DateTime(chat.lastDankTime.year, chat.lastDankTime.month, chat.lastDankTime.day);
     int difference = DateTime.now().difference(last).inDays;
     if(difference == 0) {
       updateData["lastDankstreakTime"] = FieldValue.serverTimestamp();
