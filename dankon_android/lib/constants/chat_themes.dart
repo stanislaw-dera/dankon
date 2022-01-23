@@ -9,6 +9,17 @@ ChatTheme getChatThemeById(String id) {
 
 List<ChatTheme> chatThemes = [
   ChatTheme(
+      id: "default",
+      name: "Default",
+      backgroundColor: const Color(0xFFFEFEFE),
+      secondaryColor: const Color(0xFFFEFEFE),
+      textColor: const Color(0xFF2E2E2E),
+      messageTextColor: const Color(0xFF000000),
+      messageBackgroundColor: const Color(0xFFEFEFEF),
+      myMessageTextColor: const Color(0xFFFEFEFE),
+      myMessageBackgroundColor: const Color(0xFFFBD100),
+      buttonsColor: const Color(0xFFFFD500)),
+  ChatTheme(
       id: "night-mountains-blue",
       name: "Night mountains blue",
       backgroundColor: const Color(0xFF05253D),

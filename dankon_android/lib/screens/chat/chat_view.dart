@@ -18,7 +18,7 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  ChatTheme chatTheme = getChatThemeById("night-mountains-blue");
+  ChatTheme chatTheme = getChatThemeById("default");
 
   void changeTheme(String id) {
     setState(() {
@@ -59,6 +59,7 @@ AppBar buildAppBar(Chat chat, String myUid, ChatTheme chatTheme) {
     titleSpacing: 0,
     backgroundColor: chatTheme.secondaryColor,
     foregroundColor: chatTheme.textColor,
+    elevation: 2,
     title: Row(
       children: [
         CachedAvatar(
@@ -71,7 +72,6 @@ AppBar buildAppBar(Chat chat, String myUid, ChatTheme chatTheme) {
         Text(chat.getChatName(myUid)),
       ],
     ),
-    actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.info))],
   );
 }
 
