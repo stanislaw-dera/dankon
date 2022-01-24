@@ -30,7 +30,7 @@ class Chat {
   final String lastMessageContent;
 
   bool canIDank(String myUid) {
-    if (lastDankAuthor != myUid || DateTime.now().difference(lastDankTime).inDays > 2) {
+    if (lastDankAuthor != myUid || DateTime.now().difference(lastDankTime).inDays > 2 && lastDankTime != placeholderDateTime) {
       return true;
     } else {
       return false;

@@ -30,6 +30,9 @@ class _DanksPageState extends State<DanksPage> {
                       ? "${chat.danks} danks! 🔥${chat.countDays()} "
                       : "${chat.danks} danks!";
 
+              print(title);
+              print("\t${chat.id}");
+
               return ChatTile(
                   subtitle: subtitle,
                   title: title,
