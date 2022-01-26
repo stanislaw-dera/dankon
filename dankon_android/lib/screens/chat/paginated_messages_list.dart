@@ -3,8 +3,11 @@ import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
 import 'package:dankon/screens/chat/chat_element_chooser.dart';
+import 'package:dankon/services/read_receipt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:paginate_firestore/bloc/pagination_cubit.dart';
+import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +26,7 @@ class PaginatedMessagesList extends StatelessWidget {
         .collection("chats/${chat.id}/messages")
         .orderBy("time", descending: true);
 
+    final ReadReceiptService readReceiptService = ReadReceiptService(chat: chat, uid: myUid);
 
     return PaginateFirestore(
       query: messagesQuery,
@@ -30,6 +34,9 @@ class PaginatedMessagesList extends StatelessWidget {
       reverse: true,
       physics: const BouncingScrollPhysics(),
       isLive: true,
+      onLoaded: (PaginationLoaded paginationLoaded) {
+        readReceiptService.updateReadReceipt();
+      },
       itemBuilder:
           (context, documentSnapshots, index) {
 
