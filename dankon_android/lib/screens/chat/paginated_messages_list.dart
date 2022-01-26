@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
-import 'package:dankon/widgets/message_bubble.dart';
+import 'package:dankon/screens/chat/chat_element_chooser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
@@ -32,10 +32,17 @@ class PaginatedMessagesList extends StatelessWidget {
       isLive: true,
       itemBuilder:
           (context, documentSnapshots, index) {
-        final json = documentSnapshots[index].data() as Map<String,dynamic>;
-        final Message message = Message.fromJson(json);
 
-        return MessageBuble(byMe: message.author == myUid, msg: message,);
+        final messageJson = documentSnapshots[index].data() as Map<String,dynamic>;
+        final Message message = Message.fromJson(messageJson);
+
+        final previousMessageJson = documentSnapshots.asMap().containsKey(index + 1) ? documentSnapshots[index + 1].data() : null;
+        final Message? previousMessage = previousMessageJson != null ? Message.fromJson(previousMessageJson as Map<String,dynamic>) : null;
+
+        final nextMessageJson = documentSnapshots.asMap().containsKey(index - 1) ? documentSnapshots[index - 1].data() : null;
+        final Message? nextMessage = nextMessageJson != null ? Message.fromJson(nextMessageJson as Map<String,dynamic>) : null;
+
+        return ChatElementChooser(message: message, previousMessage: previousMessage, nextMessage: nextMessage,);
       },
       onEmpty: ChatWelcome(photoUrl: chat.getChatImageUrl(myUid), title: chat.getChatName(myUid)),
       initialLoader: Center(child: CircularProgressIndicator(color: chatTheme.secondaryColor,)),
