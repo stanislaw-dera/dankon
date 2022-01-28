@@ -17,7 +17,7 @@ class Chat {
   final String id;
   final String chatroomName;
   final List allParticipants;
-  final List participantsData;
+  final List<TheUser> participantsData;
 
   final int danks;
   final String lastDankAuthor;
@@ -81,6 +81,17 @@ class Chat {
 
   Future<Response> incrementDanks(String uid) {
     return DatabaseService(uid: uid).incrementDanks(this, uid);
+  }
+
+  List<String> getListOfAvatarsFromUids(List<String> uids, {String excludedUid = ""}) {
+    List<String> avatars = [];
+
+    for (var uid in uids) {
+      TheUser theUser = participantsData.firstWhere((element) => element.uid == uid);
+      if(uid != excludedUid) avatars.add(theUser.urlAvatar);
+    }
+
+    return avatars;
   }
 
   Chat(
