@@ -1,4 +1,5 @@
 import 'package:dankon/constants/chat_themes.dart';
+import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/screens/chat/paginated_messages_list.dart';
@@ -39,7 +40,7 @@ class _ChatViewState extends State<ChatView> {
               children: [
                 Expanded(
                   child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          padding: const EdgeInsets.only(left: 15.0, right: 15.0 - smAvatarRadius),
                           child: PaginatedMessagesList(chat: chat,)
                         ),
                 ),

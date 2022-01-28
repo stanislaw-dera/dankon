@@ -4,6 +4,8 @@ const kPrimaryColor = Color(0xFFFFD500);
 const kSecondaryColor = Color(0xFFFFFDF2);
 const kDarkColor = Color(0xFF2E2E2E);
 
+const smAvatarRadius = 10.0;
+
 ThemeData kThemeData = ThemeData(
   primaryColor: kPrimaryColor,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
