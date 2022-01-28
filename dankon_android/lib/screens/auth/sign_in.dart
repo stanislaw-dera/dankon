@@ -1,4 +1,5 @@
 import 'package:dankon/constants/constants.dart';
+import 'package:dankon/models/response.dart';
 import 'package:dankon/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,15 +13,26 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
+  bool isLoading = false;
+
+  void toggleLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kSecondaryColor,
-      body: Column(
+      body: isLoading ? const Center(child: CircularProgressIndicator(),) : Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(width: double.infinity,),
+          const Image(image: AssetImage("assets/rocket.png")),
+          const Text("Welcome to",
+              style: TextStyle(fontSize: 16)),
           const Text(
             ":Dankon",
             style: TextStyle(
@@ -29,18 +41,15 @@ class _SignInState extends State<SignIn> {
                 fontWeight: FontWeight.bold),
           ),
           const SizedBox(
-            height: 10,
-          ),
-          const Text("The nicest place to hang out",
-              style: TextStyle(fontSize: 16)),
-          const SizedBox(
-            height: 40,
+            height: 20,
           ),
           SignInButton(
             Buttons.Google,
-
-            onPressed: () {
-              context.read<AuthenticationService>().signInWithGoogle();
+            onPressed: () async {
+              toggleLoading();
+              Response signInResponse = await context.read<AuthenticationService>().signInWithGoogle();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(signInResponse.type == "error" ? signInResponse.content! :"Signed in!")));
+              toggleLoading();
             },
           ),
         ],

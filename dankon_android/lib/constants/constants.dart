@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor = Color(0xFFFFD500);
+const kPrimaryColor = Color(0xFFFFC300);
 const kSecondaryColor = Color(0xFFFFFDF2);
 const kDarkColor = Color(0xFF2E2E2E);
 
@@ -21,5 +21,11 @@ ThemeData kThemeData = ThemeData(
   tabBarTheme: const TabBarTheme(
     unselectedLabelColor: Colors.white70,
     labelColor: kPrimaryColor,
+  ),
+  progressIndicatorTheme: const ProgressIndicatorThemeData(
+    color: kPrimaryColor
+  ),
+  snackBarTheme: const SnackBarThemeData(
+    behavior: SnackBarBehavior.floating
   )
 );

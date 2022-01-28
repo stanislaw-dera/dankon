@@ -17,8 +17,8 @@ List<ChatTheme> chatThemes = [
       messageTextColor: const Color(0xFF000000),
       messageBackgroundColor: const Color(0xFFEFEFEF),
       myMessageTextColor: const Color(0xFFFEFEFE),
-      myMessageBackgroundColor: const Color(0xFFFFBF00),
-      buttonsColor: const Color(0xFFFFBF00)),
+      myMessageBackgroundColor: const Color(0xFFFFC300),
+      buttonsColor: const Color(0xFFFFC300)),
   ChatTheme(
       id: "night-mountains-blue",
       name: "Night mountains blue",
