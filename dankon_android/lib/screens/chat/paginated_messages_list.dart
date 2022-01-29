@@ -43,6 +43,7 @@ class PaginatedMessagesList extends StatelessWidget {
             (context, documentSnapshots, index) {
 
           final messageJson = documentSnapshots[index].data() as Map<String,dynamic>;
+          messageJson["id"] = documentSnapshots[index].id;
           final Message message = Message.fromJson(messageJson);
 
           final previousMessageJson = documentSnapshots.asMap().containsKey(index + 1) ? documentSnapshots[index + 1].data() : null;
@@ -51,7 +52,7 @@ class PaginatedMessagesList extends StatelessWidget {
           final nextMessageJson = documentSnapshots.asMap().containsKey(index - 1) ? documentSnapshots[index - 1].data() : null;
           final Message? nextMessage = nextMessageJson != null ? Message.fromJson(nextMessageJson as Map<String,dynamic>) : null;
 
-          return ChatElementChooser(chat: chat, message: message, previousMessage: previousMessage, nextMessage: nextMessage,);
+          return ChatElementChooser(message: message, previousMessage: previousMessage, nextMessage: nextMessage,);
         },
         onEmpty: ChatWelcome(photoUrl: chat.getChatImageUrl(myUid), title: chat.getChatName(myUid)),
         initialLoader: Center(child: CircularProgressIndicator(color: chatTheme.secondaryColor,)),

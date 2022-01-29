@@ -1,6 +1,7 @@
 import 'package:dankon/utils/timestamp_to_datetime.dart';
 
 class Message {
+  final String? id;
   final DateTime time;
   final String author;
   final String content;
@@ -14,11 +15,12 @@ class Message {
   };
 
   Message.fromJson(Map<String, dynamic> json)
-      : time = timestampToDateTime(json["time"]),
+      : id = json["id"],
+        time = timestampToDateTime(json["time"]),
         author = json["author"],
         content = json["content"],
         type = json["type"] ?? "TEXT_MESSAGE";
 
-  Message({required this.time, required this.author, required this.content, this.type = "TEXT_MESSAGE"});
+  Message({this.id, required this.time, required this.author, required this.content, this.type = "TEXT_MESSAGE"});
 
 }

@@ -31,25 +31,28 @@ class _ChatViewState extends State<ChatView> {
     String myUid = context.read<User?>()!.uid;
     final Chat chat = ModalRoute.of(context)!.settings.arguments as Chat;
 
-    return Provider<ChatTheme>.value(
-        value: chatTheme,
-        child: Scaffold(
-            backgroundColor: chatTheme.backgroundColor,
-            appBar: buildAppBar(chat, myUid, chatTheme),
-            body: Column(
-              children: [
-                Expanded(
-                  child: Padding(
-                          padding: const EdgeInsets.only(left: 15.0, right: 15.0 - smAvatarRadius),
-                          child: PaginatedMessagesList(chat: chat,)
-                        ),
-                ),
-                MessageInput(
-                  chatId: chat.id,
-                  databaseService: DatabaseService(uid: myUid),
-                )
-              ],
-            )));
+    return MultiProvider(
+      providers: [
+        Provider<ChatTheme>.value(value: chatTheme),
+        Provider<Chat>.value(value: chat)
+      ],
+      child: Scaffold(
+          backgroundColor: chatTheme.backgroundColor,
+          appBar: buildAppBar(chat, myUid, chatTheme),
+          body: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                        padding: const EdgeInsets.only(left: 15.0, right: 15.0 - smAvatarRadius),
+                        child: PaginatedMessagesList(chat: chat,)
+                      ),
+              ),
+              MessageInput(
+                chatId: chat.id,
+                databaseService: DatabaseService(uid: myUid),
+              )
+            ],
+          )));
   }
 }
 
