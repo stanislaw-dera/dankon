@@ -115,4 +115,9 @@ class DatabaseService {
 
     return Response(type: "success");
   }
+
+  Future<Response> deleteMessage(Message message, String chatId) async {
+    await getMessagesCollection(chatId).doc(message.id).delete();
+    return Response(type: "success");
+  }
 }

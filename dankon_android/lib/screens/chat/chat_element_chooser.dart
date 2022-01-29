@@ -10,13 +10,11 @@ import 'package:provider/provider.dart';
 class ChatElementChooser extends StatelessWidget {
   const ChatElementChooser(
       {Key? key,
-      required this.chat,
       required this.message,
       this.previousMessage,
       this.nextMessage})
       : super(key: key);
 
-  final Chat chat;
 
   final Message message;
   final Message? previousMessage;
@@ -25,6 +23,7 @@ class ChatElementChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String myUid = context.read<User?>()!.uid;
+    Chat chat = context.read<Chat>();
 
     bool threadTheMessageAbove = previousMessage != null &&
         previousMessage!.author == message.author &&

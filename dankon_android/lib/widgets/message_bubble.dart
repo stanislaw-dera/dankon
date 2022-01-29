@@ -1,3 +1,4 @@
+import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
 import 'package:dankon/widgets/message_details_sheet.dart';
@@ -18,13 +19,14 @@ class MessageBuble extends StatelessWidget {
   Widget build(BuildContext context) {
 
     ChatTheme chatTheme = context.watch<ChatTheme>();
+    Chat chat = context.read<Chat>();
     Radius defaultRadius =  const Radius.circular(20);
 
     return Row(
       mainAxisAlignment: byMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [Flexible(
         child: GestureDetector(
-          onLongPress: () => byMe ? showModalBottomSheet(context: context, builder: (BuildContext context) => const MessageDetailsSheet()) : () => {},
+          onLongPress: () => byMe ? showModalBottomSheet(context: context, builder: (BuildContext context) => MessageDetailsSheet(msg: msg, chat: chat,)) : () => {},
           child: Container(
             constraints: const BoxConstraints(maxWidth: 300),
             padding: const EdgeInsets.symmetric(
