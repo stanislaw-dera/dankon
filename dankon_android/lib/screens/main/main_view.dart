@@ -3,6 +3,7 @@ import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/screens/main/chats/chats.dart';
 import 'package:dankon/screens/main/danks/danks.dart';
+import 'package:dankon/services/unread_messages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,57 +45,59 @@ class _MainViewState extends State<MainView> {
         })
         .toList());
 
-    return StreamProvider<List<Chat>?>.value(
-      value: chatsStream,
-      initialData: null,
-      child: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            body: SafeArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/settings');
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: kDarkColor,
-                              backgroundImage: NetworkImage(me.photoURL.toString()),
-                              radius: 20,
-                            ),
-                          ),
-                          const SizedBox(width: 20,),
-                          const Text('Dankon', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
-                        ],
+    return MultiProvider(
+        providers: [
+          StreamProvider<List<Chat>?>.value(
+            value: chatsStream,
+            initialData: null,
+          ),
+          StreamProvider<Map<String, DateTime>>.value(value: UnreadMessagesService(myUid).unreadMessagesData, initialData: const {})
+        ],
+      child: Scaffold(
+        body: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/settings');
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: kDarkColor,
+                          backgroundImage: NetworkImage(me.photoURL.toString()),
+                          radius: 20,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10,),
-                    Expanded(child: _pages.elementAt(_selectedPage)),
-                  ],
-                )
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: ':Dank',
+                      const SizedBox(width: 20,),
+                      const Text('Dankon', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
+                    ],
+                  ),
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.chat),
-                  label: 'Chat',
-                ),
+                const SizedBox(height: 10,),
+                Expanded(child: _pages.elementAt(_selectedPage)),
               ],
-              selectedItemColor: kDarkColor,
-              currentIndex: _selectedPage,
-              onTap: _onItemTapped,
-            ),
+            )
         ),
-      )
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: ':Dank',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat),
+              label: 'Chat',
+            ),
+          ],
+          selectedItemColor: kDarkColor,
+          currentIndex: _selectedPage,
+          onTap: _onItemTapped,
+        ),
+        )
     );
   }
 }

@@ -22,8 +22,13 @@ class ReadReceiptService {
     return database.ref("chats/${chat.id}/read-receipt/$uid");
   }
 
-  Future<void> updateReadReceipt() {
-    return getMyReadReceiptRef().set(ServerValue.timestamp);
+  DatabaseReference getUnreadMessagesDataRef() {
+    return database.ref("unread_messages_data/$uid/${chat.id}");
+  }
+
+  void updateReadReceipt() {
+    getMyReadReceiptRef().set(ServerValue.timestamp);
+    getUnreadMessagesDataRef().set(ServerValue.timestamp);
   }
 
   List<String> getUidsToShowReadReceipt(DateTime timeSent, DateTime? nextSentTime, Map<dynamic, dynamic> readReceiptData) {
