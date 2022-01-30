@@ -17,6 +17,7 @@ class _DanksPageState extends State<DanksPage> {
   Widget build(BuildContext context) {
     String myUid = context.read<User?>()!.uid;
     List<Chat>? chats = context.watch<List<Chat>?>();
+    Map<String, DateTime> unreadMessagesData = context.watch<Map<String, DateTime>>();
 
     return chats == null ? const Center(child: CircularProgressIndicator(),) : ListView(
           physics: const BouncingScrollPhysics(),
@@ -24,6 +25,7 @@ class _DanksPageState extends State<DanksPage> {
 
             String title = chat.getChatName(myUid);
             String image = chat.getChatImageUrl(myUid);
+            bool unreadMessages = unreadMessagesData[chat.id] != null && unreadMessagesData[chat.id]!.isBefore(chat.lastMessageTime);
 
               String subtitle =
                   chat.countDays() > 0 && !chat.startNewDankstreak()
@@ -34,6 +36,7 @@ class _DanksPageState extends State<DanksPage> {
                   subtitle: subtitle,
                   title: title,
                   imageUrl: image,
+                  isHighlighted: unreadMessages,
                   trailing: chat.canIDank(myUid)
                       ? OutlinedButton(
                           onPressed: () {
