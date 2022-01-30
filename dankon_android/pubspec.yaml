@@ -48,6 +48,7 @@ dependencies:
   url_launcher: ^6.0.18
   flutter_local_notifications: ^9.2.0
   firebase_database: ^9.0.5
+  badges: ^2.0.2
 
 dev_dependencies:
   flutter_test:
