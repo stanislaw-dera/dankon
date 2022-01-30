@@ -60,6 +60,7 @@ class _MessageInputState extends State<MessageInput> {
                       child: TextField(
                         controller: messageController,
                         keyboardType: TextInputType.multiline,
+                        textCapitalization: TextCapitalization.sentences,
                         style: TextStyle(color: chatTheme.textColor),
                         maxLines: 4,
                         minLines: 1,
