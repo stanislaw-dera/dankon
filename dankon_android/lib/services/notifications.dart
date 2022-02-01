@@ -1,7 +1,15 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:dankon/constants/constants.dart';
 
 class NotificationsService {
   static final _notifications = FlutterLocalNotificationsPlugin();
+
+  static AndroidNotificationChannel chatsChannel = const AndroidNotificationChannel(
+    'chats_channel',
+    ':Dankon Chats',
+    importance: Importance.max,
+  );
+
 
   static Future initialize() async {
     const AndroidInitializationSettings androidInitialization =
@@ -11,16 +19,22 @@ class NotificationsService {
         android: androidInitialization,
     );
 
+    await _notifications
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(chatsChannel);
+
     return _notifications.initialize(initializationSettings);
   }
 
   static Future _chatNotificationDetails() async {
-    return const NotificationDetails(
+    return NotificationDetails(
       iOS: IOSNotificationDetails(),
       android: AndroidNotificationDetails(
-        'chats',
-        ':Dankon Chats',
-        importance: Importance.max,
+        chatsChannel.id,
+        chatsChannel.name,
+        importance: chatsChannel.importance,
+        icon: "chat_notification_icon",
+        color: kPinkColor,
       )
     );
   }
