@@ -72,7 +72,7 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/app_logo.png"
-  adaptive_icon_background: "#FFFDF2"
+  adaptive_icon_background: "#fff8f4"
   adaptive_icon_foreground: "assets/app_logo_foreground.png"
 
 flutter:
