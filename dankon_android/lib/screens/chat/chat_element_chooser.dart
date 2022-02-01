@@ -5,6 +5,8 @@ import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:dankon/widgets/message_bubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:dankon/utils/date_only_compare.dart';
 import 'package:provider/provider.dart';
 
 class ChatElementChooser extends StatelessWidget {
@@ -41,6 +43,7 @@ class ChatElementChooser extends StatelessWidget {
       return Padding(
         padding: EdgeInsets.only(top: threadTheMessageAbove ? 2 : 30),
         child: Column(children: [
+          TimeDivider(messageTime: message.time, previousMessageTime:  previousMessage != null ? previousMessage!.time : null,),
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: MessageBuble(
@@ -72,5 +75,24 @@ class ChatElementChooser extends StatelessWidget {
     }
 
     return Container();
+  }
+}
+
+class TimeDivider extends StatelessWidget {
+  const TimeDivider({Key? key, this.previousMessageTime, required this.messageTime}) : super(key: key);
+  final DateTime? previousMessageTime;
+  final DateTime messageTime;
+
+  @override
+  Widget build(BuildContext context) {
+
+    if(previousMessageTime == null || !previousMessageTime!.isTheSameDate(messageTime)) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Text(DateFormat('EEEE, MMM d').format(messageTime)),
+      );
+    } else {
+      return Container();
+    }
   }
 }
