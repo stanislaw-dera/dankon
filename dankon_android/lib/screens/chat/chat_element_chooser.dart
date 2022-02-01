@@ -1,6 +1,7 @@
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/message.dart';
 import 'package:dankon/services/read_receipt.dart';
+import 'package:dankon/utils/timestamp_to_datetime.dart';
 import 'package:dankon/widgets/cached_avatar.dart';
 import 'package:dankon/widgets/message_bubble.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -86,7 +87,7 @@ class TimeDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    if(previousMessageTime == null || !previousMessageTime!.isTheSameDate(messageTime)) {
+    if(previousMessageTime == null || !previousMessageTime!.isTheSameDate(messageTime) && messageTime != placeholderDateTime) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Text(DateFormat('EEEE, MMM d').format(messageTime)),
