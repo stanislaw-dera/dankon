@@ -168,7 +168,7 @@ exports.sendChatNotification = functions.firestore
 
     functions.logger.log(`Reciver uid is ${notificationReciverUid}`);
 
-    // get recivger's tokens
+    // get reciver's tokens
     const reciverRef = db.collection("users").doc(notificationReciverUid);
     const reciverDoc = await reciverRef.get();
     const reciverDocData = reciverDoc.data();
@@ -185,7 +185,6 @@ exports.sendChatNotification = functions.firestore
     const message = {
       data: {
         type: "CHAT/NEW_MESSAGE",
-        id: chatId,
         senderName: "Somebody",
       },
       notification: {

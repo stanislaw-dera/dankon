@@ -107,6 +107,13 @@ class DatabaseService {
     return Response(type: "success");
   }
 
+  Future<Chat> getChatById(String chatId) async {
+    DocumentSnapshot documentSnapshot = await chatsCollection.doc(chatId).get();
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    data["id"] = chatId;
+    return Chat.fromJson(data);
+  }
+
   Future<Response> sendMessage(Message message, String chatId) async {
     Map<String, dynamic> json = message.toJson();
     json["time"] = FieldValue.serverTimestamp();

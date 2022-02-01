@@ -16,6 +16,30 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
+
+  Future<void> setupInteractedMessage() async {
+    RemoteMessage? initialMessage =
+    await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupInteractedMessage();
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    if (message.data['type'] == 'CHAT/NEW_MESSAGE' && message.data.containsKey("id")) {
+      Navigator.pushNamed(context, '/chat-entry', arguments: message.data["id"]);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
