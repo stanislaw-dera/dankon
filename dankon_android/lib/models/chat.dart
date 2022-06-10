@@ -126,7 +126,7 @@ class Chat {
         participantsData = jsonToListOfUsers(json["participantsData"]),
         danks = json["danks"],
         lastDankAuthor = json["lastDankAuthor"] ?? "",
-        lastDankTime = timestampToDateTime(json["lastDankTime"]),
+        lastDankTime = timestampToDateTime(json["lastDankTime"], true),
         lastDankstreakTime = timestampToDateTime(json["lastDankstreakTime"]),
         dankstreakFrom = timestampToDateTime(json["dankstreakFrom"]),
         lastMessageTime = timestampToDateTime(json["lastMessageTime"]),

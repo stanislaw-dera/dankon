@@ -16,7 +16,7 @@ class Message {
 
   Message.fromJson(Map<String, dynamic> json)
       : id = json["id"],
-        time = timestampToDateTime(json["time"]),
+        time = timestampToDateTime(json["time"], true),
         author = json["author"],
         content = json["content"],
         type = json["type"] ?? "TEXT_MESSAGE";
