@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MessageInput extends StatefulWidget {
-  const MessageInput({Key? key, required this.chatId, required this.databaseService}) : super(key: key);
+  const MessageInput({Key? key, required this.chatId, required this.databaseService, this.onMessageSent}) : super(key: key);
   final DatabaseService databaseService;
   final String chatId;
+  final void Function()? onMessageSent;
 
   @override
   _MessageInputState createState() => _MessageInputState();
@@ -77,10 +78,12 @@ class _MessageInputState extends State<MessageInput> {
               ),
             ),
             // const SizedBox(width: 20),
-            IconButton(icon: Icon(Icons.send, color: chatTheme.buttonsColor,), padding: EdgeInsets.zero, onPressed: () {
+            IconButton(icon: Icon(Icons.send, color: chatTheme.buttonsColor,), padding: EdgeInsets.zero, onPressed: () async {
               if(messageController.text.isNotEmpty) {
-                widget.databaseService.sendMessage(Message(time: DateTime.now(), author: widget.databaseService.uid.toString(), content: messageController.text), widget.chatId);
+                String msgText = messageController.text;
                 messageController.clear();
+                await widget.databaseService.sendMessage(Message(time: DateTime.now(), author: widget.databaseService.uid.toString(), content: msgText), widget.chatId);
+                if(widget.onMessageSent != null) widget.onMessageSent!();
               }
             },)
           ],
