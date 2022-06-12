@@ -28,5 +28,10 @@ ThemeData kThemeData = ThemeData(
   ),
   snackBarTheme: const SnackBarThemeData(
     behavior: SnackBarBehavior.floating
+  ),
+  bottomSheetTheme: const BottomSheetThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+    )
   )
 );

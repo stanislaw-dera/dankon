@@ -1,6 +1,7 @@
 import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/widgets/chat_tile.dart';
+import 'package:dankon/widgets/friend_bottom_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,7 @@ class _DanksPageState extends State<DanksPage> {
                           onPressed: () {
                             chat.incrementDanks(myUid);
                           },
+                          onLongPress: () => showFriendBottomSheet(chat, context),
                           child: const Text('Dankon!'),
                           style: ButtonStyle(
                               foregroundColor:
