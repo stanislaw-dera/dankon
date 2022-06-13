@@ -1,5 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const { firestore } = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
 exports.sendDankNotification = functions.firestore
@@ -102,12 +103,12 @@ exports.sendChatNotification = functions.firestore
       },
       notification: {
         title: senderName,
-        body: "New messages"
+        body: "New messages",
       },
       android: {
         notification: {
-          tag: chatId
-        }
+          tag: chatId,
+        },
       },
       tokens: reciverTokens,
     };
@@ -120,11 +121,11 @@ exports.sendChatNotification = functions.firestore
     chatDocRef.update({
       lastMessageTime: messageData.time,
       lastMessageAuthor: senderName.split(" ")[0],
-      lastMessageContent: messageData.content
-    })
+      lastMessageContent: messageData.content,
+    });
   });
 
-  exports.cleanUpAfterMessageDeletion = functions.firestore
+exports.cleanUpAfterMessageDeletion = functions.firestore
   .document("chats/{chatId}/messages/{messageId}")
   .onDelete(async (snap, context) => {
     const db = admin.firestore();
@@ -139,8 +140,12 @@ exports.sendChatNotification = functions.firestore
 
     // Get previous message
     let previousMessage = {};
-    const previousMessagesSnapshot = await db.collection(`chats/${chatId}/messages`).orderBy("time", "desc").limit(1).get();
-    previousMessagesSnapshot.forEach(doc => {
+    const previousMessagesSnapshot = await db
+      .collection(`chats/${chatId}/messages`)
+      .orderBy("time", "desc")
+      .limit(1)
+      .get();
+    previousMessagesSnapshot.forEach((doc) => {
       previousMessage = doc.data();
     });
 
@@ -155,8 +160,8 @@ exports.sendChatNotification = functions.firestore
     await chatDocRef.update({
       lastMessageTime: previousMessage.time,
       lastMessageAuthor: senderName.split(" ")[0],
-      lastMessageContent: previousMessage.content
-    })
+      lastMessageContent: previousMessage.content,
+    });
 
     // get notification reciver uid
     let notificationReciverUid = null;
@@ -189,15 +194,111 @@ exports.sendChatNotification = functions.firestore
       },
       notification: {
         title: "Somebody",
-        body: "Deleted messages"
+        body: "Deleted messages",
       },
       android: {
         notification: {
-          tag: chatId
-        }
+          tag: chatId,
+        },
       },
       tokens: reciverTokens,
     };
     const messaging = admin.messaging();
     await messaging.sendMulticast(message);
   });
+
+exports.startTicTacToe = functions.https.onCall(async (data, context) => {
+  const db = admin.firestore();
+
+  const rtdb = admin.database();
+
+  const chatId = data.chatId;
+  const chatDocRef = db.collection("chats").doc(chatId);
+  const chatDoc = await chatDocRef.get();
+  const chatData = chatDoc.data();
+
+  const rtdbRef = rtdb.ref(`games/tic-tac-toe/${chatId}`);
+
+  // get notification reciver uid
+  let notificationReciverUid = null;
+  let senderUid = null;
+  let senderName = "";
+  chatData.participantsData.forEach((participant) => {
+    if (context.auth.uid != participant.uid) {
+      notificationReciverUid = participant.uid;
+    } else {
+      senderName = participant.name;
+      senderUid = participant.uid;
+    }
+  });
+
+  functions.logger.log(`Reciver uid is ${notificationReciverUid}`);
+
+  if (context.auth.uid != senderUid) return;
+
+  // Generate cols helper
+  const generateCols = (n) => {
+    let c = [];
+    for (let i = 0; i < n; i++) {
+      c.push("");
+    }
+    return c;
+  };
+
+  // Generate board
+  let board = [];
+  for (let i = 0; i < data.boardSize; i++) {
+    board.push(generateCols(data.boardSize));
+  }
+
+  functions.logger.log(
+    `Board ${data.boardSize}x${data.boardSize} generated`,
+    board
+  );
+
+  await rtdbRef.set({
+    board: board,
+    playerX: context.auth.uid,
+    playerY: notificationReciverUid,
+    size: data.boardSize,
+    symbolsToAlign: data.symbolsToAlign,
+  });
+
+  // get recivger's tokens
+  const reciverRef = db.collection("users").doc(notificationReciverUid);
+  const reciverDoc = await reciverRef.get();
+  const reciverDocData = reciverDoc.data();
+  const reciverTokens = reciverDocData.notificationsTokens;
+
+  functions.logger.log("Got reciver tokens", { tokens: reciverTokens });
+
+  // prepare message
+  const message = {
+    data: {
+      type: "CHAT/OVERCHAT/TIC-TAC-TOE",
+      id: chatId,
+      senderName: senderName,
+    },
+    notification: {
+      title: "Tic Tac Toe",
+      body: `${senderName} challenged you`,
+    },
+    android: {
+      notification: {
+        tag: `${chatId}/TIC-TAC-TOE`,
+      },
+    },
+    tokens: reciverTokens,
+  };
+
+  // send notification
+  const messaging = admin.messaging();
+  await messaging.sendMulticast(message);
+
+  // update chat
+  chatDocRef.update({
+    lastMessageTime: admin.firestore.FieldValue.serverTimestamp(),
+    lastMessageAuthor: senderName.split(" ")[0],
+    lastMessageContent: "Tic Tac Toe game has started",
+  });
+});

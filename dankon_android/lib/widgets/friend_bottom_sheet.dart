@@ -82,7 +82,7 @@ class FriendBottomSheet extends StatelessWidget {
           ElevatedButton(onPressed: () {
             Navigator.of(context).pop();
             showModalBottomSheet(context: context, builder: (context) {
-              return const StartTicTacToeBottomSheet();
+              return StartTicTacToeBottomSheet(chat: chat);
             });
           }, child: const Text("Start tic tac toe")),
           Padding(

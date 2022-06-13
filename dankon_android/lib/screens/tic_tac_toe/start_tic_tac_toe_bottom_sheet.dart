@@ -1,9 +1,13 @@
 import 'package:dankon/constants/constants.dart';
+import 'package:dankon/models/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:dankon/models/tic_tac_toe_settings.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class StartTicTacToeBottomSheet extends StatefulWidget {
-  const StartTicTacToeBottomSheet({Key? key}) : super(key: key);
+  const StartTicTacToeBottomSheet({Key? key, required this.chat}) : super(key: key);
+
+  final Chat chat;
 
   @override
   State<StartTicTacToeBottomSheet> createState() =>
@@ -25,6 +29,8 @@ class _StartTicTacToeBottomSheetState extends State<StartTicTacToeBottomSheet> {
     TicTacToeSettings(name: "5x5", symbolsToAlign: 4, boardSize: 5),
     TicTacToeSettings(name: "7x7", symbolsToAlign: 4, boardSize: 7),
   ];
+
+  final functions = FirebaseFunctions.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +60,11 @@ class _StartTicTacToeBottomSheetState extends State<StartTicTacToeBottomSheet> {
               child: OutlinedButton(
                 onPressed: () async {
                   changeIsLoading(true);
-                  // TODO: Create game in DB
-                  await Future.delayed(const Duration(seconds: 3));
+                  await functions.httpsCallable("startTicTacToe", ).call({
+                    "chatId": widget.chat.id,
+                    "boardSize": preset.boardSize,
+                    "symbolsToAlign": preset.symbolsToAlign,
+                  });
                   changeIsLoading(false);
                   // TODO: Push to game screen
                 },
