@@ -1,7 +1,9 @@
 import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
+import 'package:dankon/screens/tic_tac_toe/play_view.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:dankon/models/tic_tac_toe_settings.dart';
+import 'package:dankon/screens/tic_tac_toe/models/settings.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 class StartTicTacToeBottomSheet extends StatefulWidget {
@@ -33,6 +35,30 @@ class _StartTicTacToeBottomSheetState extends State<StartTicTacToeBottomSheet> {
   final functions = FirebaseFunctions.instance;
 
   @override
+  void initState() {
+    super.initState();
+    prepareToStart();
+  }
+
+  void prepareToStart() async {
+    changeIsLoading(true);
+    DatabaseReference gameRef = FirebaseDatabase.instance.ref("games/tic-tac-toe/${widget.chat.id}");
+    final snapshot = await gameRef.get();
+
+    if (snapshot.exists && snapshot.child("isEnded").value != true) {
+      Navigator.of(context).pop();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PlayTicTacToeView(chat: widget.chat),
+        ),
+      );
+    } else {
+      changeIsLoading(false);
+    }
+  }
+
+
+    @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
@@ -60,13 +86,18 @@ class _StartTicTacToeBottomSheetState extends State<StartTicTacToeBottomSheet> {
               child: OutlinedButton(
                 onPressed: () async {
                   changeIsLoading(true);
-                  await functions.httpsCallable("startTicTacToe", ).call({
+                  await functions.httpsCallable("startTicTacToe").call({
                     "chatId": widget.chat.id,
-                    "boardSize": preset.boardSize,
-                    "symbolsToAlign": preset.symbolsToAlign,
+                    "settings": preset.toJson()
                   });
                   changeIsLoading(false);
-                  // TODO: Push to game screen
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PlayTicTacToeView(chat: widget.chat),
+                    ),
+                  );
+
                 },
                 child: Text(preset.name),
                 style: ButtonStyle(

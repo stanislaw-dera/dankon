@@ -1,7 +1,7 @@
 import 'package:dankon/constants/chat_themes.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
-import 'package:dankon/screens/tic_tac_toe/start_tic_tac_toe_bottom_sheet.dart';
+import 'package:dankon/screens/tic_tac_toe/start_bottom_sheet.dart';
 import 'package:dankon/services/database.dart';
 import 'package:dankon/services/read_receipt.dart';
 import 'package:dankon/widgets/cached_avatar.dart';

@@ -247,12 +247,12 @@ exports.startTicTacToe = functions.https.onCall(async (data, context) => {
 
   // Generate board
   let board = [];
-  for (let i = 0; i < data.boardSize; i++) {
-    board.push(generateCols(data.boardSize));
+  for (let i = 0; i < data.settings.boardSize; i++) {
+    board.push(generateCols(data.settings.boardSize));
   }
 
   functions.logger.log(
-    `Board ${data.boardSize}x${data.boardSize} generated`,
+    `Board ${data.settings.boardSize}x${data.settings.boardSize} generated`,
     board
   );
 
@@ -260,8 +260,7 @@ exports.startTicTacToe = functions.https.onCall(async (data, context) => {
     board: board,
     playerX: context.auth.uid,
     playerY: notificationReciverUid,
-    size: data.boardSize,
-    symbolsToAlign: data.symbolsToAlign,
+    settings: data.settings,
   });
 
   // get recivger's tokens
