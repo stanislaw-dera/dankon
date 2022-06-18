@@ -1,4 +1,4 @@
-import 'package:dankon/screens/tic_tac_toe/models/player.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/models/player.dart';
 import 'package:flutter/material.dart';
 
 class TicTacToeUtils {

@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:dankon/models/chat.dart';
-import 'package:dankon/screens/tic_tac_toe/models/move.dart';
-import 'package:dankon/screens/tic_tac_toe/models/settings.dart';
-import 'package:dankon/screens/tic_tac_toe/utils/utils.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/models/move.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/models/settings.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:dankon/screens/tic_tac_toe/models/player.dart';
+import 'package:dankon/widgets/overchat//tic_tac_toe/models/player.dart';
 
 class PlayTicTacToeView extends StatefulWidget {
   const PlayTicTacToeView({Key? key, required this.chat}) : super(key: key);

@@ -1,5 +1,5 @@
-import 'package:dankon/screens/tic_tac_toe/models/settings.dart';
-import 'package:dankon/screens/tic_tac_toe/utils/game_helpers.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/models/settings.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/utils/game_helpers.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class TicTacToeMove {

@@ -1,9 +1,9 @@
 import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
-import 'package:dankon/screens/tic_tac_toe/play_view.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/play_view.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:dankon/screens/tic_tac_toe/models/settings.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/models/settings.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 class StartTicTacToeBottomSheet extends StatefulWidget {
