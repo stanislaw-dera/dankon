@@ -15,7 +15,7 @@ class CachedAvatar extends StatelessWidget {
           CircleAvatar(backgroundColor: Colors.grey[300], radius: radius),
       imageBuilder: (BuildContext context, image) =>
           CircleAvatar(backgroundImage: image, radius: radius),
-      errorWidget: (context, url, error) => const Icon(Icons.error),
+      errorWidget: (context, url, error) => CircleAvatar(backgroundColor: Colors.grey[300], backgroundImage: const AssetImage("assets/avatar.png"), radius: radius),
     );
   }
 }

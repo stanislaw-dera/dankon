@@ -112,7 +112,7 @@ class ChatWelcome extends StatelessWidget {
           height: 5,
         ),
         Text(
-          "$title is looking forward to your first message.\nGo on!",
+          "No messages in this chat\nSend something!",
           style: TextStyle(color: chatTheme.textColor),
           textAlign: TextAlign.center,
         ),
