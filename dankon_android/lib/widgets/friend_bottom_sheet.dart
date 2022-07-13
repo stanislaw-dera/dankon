@@ -1,6 +1,7 @@
 import 'package:dankon/constants/chat_themes.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
+import 'package:dankon/widgets/overchat/tic_tac_toe/send.dart';
 import 'package:dankon/services/database.dart';
 import 'package:dankon/services/read_receipt.dart';
 import 'package:dankon/widgets/cached_avatar.dart';
@@ -67,21 +68,32 @@ class FriendBottomSheet extends StatelessWidget {
               child: Provider<ChatTheme>.value(
                   value: getChatThemeById("default"),
                   child: MessageInput(
-                      chatId: chat.id,
-                      databaseService: DatabaseService(uid: me.uid),
-                      onMessageSent: () {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Message sent!")));
-                        ReadReceiptService(chat: chat, uid: me.uid).updateReadReceipt();
-                        Navigator.of(context).pop();
-                      },
+                    chatId: chat.id,
+                    databaseService: DatabaseService(uid: me.uid),
+                    onMessageSent: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Message sent!")));
+                      ReadReceiptService(chat: chat, uid: me.uid)
+                          .updateReadReceipt();
+                      Navigator.of(context).pop();
+                    },
                   ))),
+          const SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                sendTicTacToe(context, chat);
+              },
+              child: const Text("Start tic tac toe")),
           Padding(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: const SizedBox(
               height: 20,
             ),
-          )
+          ),
         ],
       ),
     );
