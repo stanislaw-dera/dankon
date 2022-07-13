@@ -28,7 +28,7 @@ class NotificationsService {
 
   static Future _chatNotificationDetails() async {
     return NotificationDetails(
-      iOS: IOSNotificationDetails(),
+      iOS: const IOSNotificationDetails(),
       android: AndroidNotificationDetails(
         chatsChannel.id,
         chatsChannel.name,

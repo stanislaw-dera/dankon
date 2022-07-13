@@ -3,7 +3,6 @@ import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/models/message.dart';
 import 'package:dankon/widgets/message_details_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';

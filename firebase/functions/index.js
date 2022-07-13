@@ -1,5 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const { firestore } = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
 exports.sendDankNotification = functions.firestore
@@ -58,9 +59,11 @@ exports.sendChatNotification = functions.firestore
   .document("chats/{chatId}/messages/{messageId}")
   .onCreate(async (snap, context) => {
     const db = admin.firestore();
+    const rtdb = admin.database();
 
     const messageData = snap.data();
 
+    const messageId = context.params.messageId;
     const chatId = context.params.chatId;
     const chatDocRef = db.collection("chats").doc(chatId);
 
@@ -102,12 +105,12 @@ exports.sendChatNotification = functions.firestore
       },
       notification: {
         title: senderName,
-        body: "New messages"
+        body: "New messages",
       },
       android: {
         notification: {
-          tag: chatId
-        }
+          tag: chatId,
+        },
       },
       tokens: reciverTokens,
     };
@@ -120,11 +123,54 @@ exports.sendChatNotification = functions.firestore
     chatDocRef.update({
       lastMessageTime: messageData.time,
       lastMessageAuthor: senderName.split(" ")[0],
-      lastMessageContent: messageData.content
-    })
+      lastMessageContent: messageData.content,
+    });
+
+    if (messageData.type == "TIC_TAC_TOE/DEFAULT") {
+      const rtdbRef = rtdb.ref(`games/tic-tac-toe/${chatId}`);
+      const gameSettings = messageData.overchatData;
+
+      // Generate cols helper
+      const generateCols = (n) => {
+        let c = [];
+        for (let i = 0; i < n; i++) {
+          c.push("");
+        }
+        return c;
+      };
+
+      // Generate board
+      let board = [];
+      for (let i = 0; i < gameSettings.boardSize; i++) {
+        board.push(generateCols(gameSettings.boardSize));
+      }
+
+      functions.logger.log(
+        `Board ${gameSettings.boardSize}x${gameSettings.boardSize} generated`,
+        board
+      );
+
+      await rtdbRef.set({
+        board: board,
+        playerX: messageData.author,
+        playerY: notificationReciverUid,
+        settings: gameSettings,
+        messageId: messageId,
+      });
+    }
+
+    functions.logger.log(`is pending: ${messageData.isPending}`);
+
+    functions.logger.log(`path: chats/${chatId}/messages/${messageId}`);
+
+    if (messageData.isPending == true) {
+      await db.doc(`chats/${chatId}/messages/${messageId}`).update({
+        isPending: false,
+      });
+    }
   });
 
-  exports.cleanUpAfterMessageDeletion = functions.firestore
+exports.cleanUpAfterMessageDeletion = functions.firestore
   .document("chats/{chatId}/messages/{messageId}")
   .onDelete(async (snap, context) => {
     const db = admin.firestore();
@@ -139,8 +185,12 @@ exports.sendChatNotification = functions.firestore
 
     // Get previous message
     let previousMessage = {};
-    const previousMessagesSnapshot = await db.collection(`chats/${chatId}/messages`).orderBy("time", "desc").limit(1).get();
-    previousMessagesSnapshot.forEach(doc => {
+    const previousMessagesSnapshot = await db
+      .collection(`chats/${chatId}/messages`)
+      .orderBy("time", "desc")
+      .limit(1)
+      .get();
+    previousMessagesSnapshot.forEach((doc) => {
       previousMessage = doc.data();
     });
 
@@ -155,8 +205,8 @@ exports.sendChatNotification = functions.firestore
     await chatDocRef.update({
       lastMessageTime: previousMessage.time,
       lastMessageAuthor: senderName.split(" ")[0],
-      lastMessageContent: previousMessage.content
-    })
+      lastMessageContent: previousMessage.content,
+    });
 
     // get notification reciver uid
     let notificationReciverUid = null;
@@ -189,15 +239,48 @@ exports.sendChatNotification = functions.firestore
       },
       notification: {
         title: "Somebody",
-        body: "Deleted messages"
+        body: "Deleted messages",
       },
       android: {
         notification: {
-          tag: chatId
-        }
+          tag: chatId,
+        },
       },
       tokens: reciverTokens,
     };
     const messaging = admin.messaging();
     await messaging.sendMulticast(message);
+  });
+
+exports.finishTicTacToe = functions.database
+  .ref("/games/tic-tac-toe/{chatId}/isEnded")
+  .onCreate((snapshot, context) => {
+    const db = admin.firestore();
+    const chatId = context.params.chatId;
+    const gameRef = snapshot.ref.parent.ref;
+
+    functions.logger.log("Got chatId", chatId);
+
+    return gameRef.once(
+      "value",
+      (gameSnapshot) => {
+        const messageId = gameSnapshot.child("messageId").val();
+        const winner = gameSnapshot.child("winner").exists
+          ? gameSnapshot.child("winner").val()
+          : null;
+
+        functions.logger.log(`Winner is ${winner} for message ${messageId}`);
+
+        return db.doc(`chats/${chatId}/messages/${messageId}`).update({
+          overchatData: { isEnded: true, winner: winner },
+        });
+      },
+      (errorObject) => {
+        functions.logger.error(
+          `The messageId read failed: ${errorObject.name}`,
+          errorObject
+        );
+        return null;
+      }
+    );
   });
