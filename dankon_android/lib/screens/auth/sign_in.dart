@@ -13,7 +13,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-
   bool isLoading = false;
 
   void toggleLoading() {
@@ -25,38 +24,46 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading ? const Center(child: CircularProgressIndicator(),) : Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Image(image: AssetImage("assets/rocket.png")),
-
-          const SizedBox(width: double.infinity,),
-
-          const Text(
-            "Hello!",
-            style: TextStyle(
-                fontSize: 48,
-                color: kPrimaryColor,
-                fontWeight: FontWeight.bold),
-          ),
-
-          const Text("Welcome to :Dankon",
-              style: TextStyle(fontSize: 16)),
-          const SizedBox(
-            height: 20,
-          ),
-          SignInButton(
-            Buttons.Google,
-            onPressed: () async {
-              toggleLoading();
-              Response signInResponse = await context.read<AuthenticationService>().signInWithGoogle();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(signInResponse.type == "error" ? signInResponse.content! :"Signed in!")));
-              toggleLoading();
-            },
-          ),
-        ],
-      ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Image(image: AssetImage("assets/rocket.png")),
+                const SizedBox(
+                  width: double.infinity,
+                ),
+                const Text(
+                  "Hello!",
+                  style: TextStyle(
+                      fontSize: 48,
+                      color: kPrimaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+                const Text("Welcome to :Dankon",
+                    style: TextStyle(fontSize: 16)),
+                const SizedBox(
+                  height: 20,
+                ),
+                SignInButton(
+                  Buttons.Google,
+                  onPressed: () async {
+                    toggleLoading();
+                    Response signInResponse = await context
+                        .read<AuthenticationService>()
+                        .signInWithGoogle();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(signInResponse.type == "error"
+                            ? signInResponse.content!
+                            : "Signed in!")));
+                    toggleLoading();
+                  },
+                ),
+              ],
+            ),
     );
   }
 }
