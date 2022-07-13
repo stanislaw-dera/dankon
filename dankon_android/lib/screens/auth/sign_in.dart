@@ -29,17 +29,20 @@ class _SignInState extends State<SignIn> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(width: double.infinity,),
           const Image(image: AssetImage("assets/rocket.png")),
-          const Text("Welcome to",
-              style: TextStyle(fontSize: 16)),
+
+          const SizedBox(width: double.infinity,),
+
           const Text(
-            ":Dankon",
+            "Hello!",
             style: TextStyle(
                 fontSize: 48,
                 color: kPrimaryColor,
                 fontWeight: FontWeight.bold),
           ),
+
+          const Text("Welcome to :Dankon",
+              style: TextStyle(fontSize: 16)),
           const SizedBox(
             height: 20,
           ),
