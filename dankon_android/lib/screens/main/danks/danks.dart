@@ -2,6 +2,7 @@ import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/widgets/chat_tile.dart';
 import 'package:dankon/widgets/friend_bottom_sheet.dart';
+import 'package:dankon/widgets/no_friends.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class _DanksPageState extends State<DanksPage> {
     List<Chat>? chats = context.watch<List<Chat>?>();
     Map<String, DateTime> unreadMessagesData = context.watch<Map<String, DateTime>>();
 
-    return chats == null ? const Center(child: CircularProgressIndicator(),) : ListView(
+    return chats == null ? const Center(child: CircularProgressIndicator(),) : chats.isNotEmpty ? ListView(
           physics: const BouncingScrollPhysics(),
           children: chats.map((Chat chat) {
 
@@ -54,6 +55,6 @@ class _DanksPageState extends State<DanksPage> {
                           child: Icon(Icons.check_circle_outline),
                         ));
             }).toList(),
-          );
+          ) : const NoFriends();
   }
 }

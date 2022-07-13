@@ -87,6 +87,7 @@ flutter:
   assets:
     - assets/app_logo.png
     - assets/rocket.png
+    - assets/add_friends.png
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,6 +1,7 @@
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/widgets/chat_tile.dart';
 import 'package:dankon/widgets/new_messages_chip.dart';
+import 'package:dankon/widgets/no_friends.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class ChatsPage extends StatelessWidget {
       return const Center(child: CircularProgressIndicator());
     } else {
       chats.sort((a,b) => b.lastMessageTime.compareTo(a.lastMessageTime));
-      return ListView(
+      return chats.isNotEmpty ? ListView(
         physics: const BouncingScrollPhysics(),
         children: chats.map((Chat chat) {
 
@@ -41,7 +42,7 @@ class ChatsPage extends StatelessWidget {
             ),
           );
         }).toList(),
-      );
+      ) : const NoFriends();
     }
 
   }
