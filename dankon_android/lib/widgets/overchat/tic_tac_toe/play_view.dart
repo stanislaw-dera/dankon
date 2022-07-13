@@ -226,7 +226,7 @@ class _PlayTicTacToeViewState extends State<PlayTicTacToeView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text("Player $currentPlayer turn", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                    Text("Player $currentPlayer turn", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
                     Expanded(
                       child: Row(
                         children: TicTacToeUtils.modelBuilder(
