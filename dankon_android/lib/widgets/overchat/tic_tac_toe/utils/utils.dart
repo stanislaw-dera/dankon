@@ -25,4 +25,10 @@ class TicTacToeUtils {
         return Colors.white;
     }
   }
+
+  static Color getBackgroundColor(String player) {
+    Color color = getFieldColor(player);
+    if(color == Colors.white) return Colors.white;
+    return color.withAlpha(150);
+  }
 }

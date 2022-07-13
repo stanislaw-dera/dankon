@@ -59,9 +59,11 @@ exports.sendChatNotification = functions.firestore
   .document("chats/{chatId}/messages/{messageId}")
   .onCreate(async (snap, context) => {
     const db = admin.firestore();
+    const rtdb = admin.database();
 
     const messageData = snap.data();
 
+    const messageId = context.params.messageId;
     const chatId = context.params.chatId;
     const chatDocRef = db.collection("chats").doc(chatId);
 
@@ -123,6 +125,49 @@ exports.sendChatNotification = functions.firestore
       lastMessageAuthor: senderName.split(" ")[0],
       lastMessageContent: messageData.content,
     });
+
+    if (messageData.type == "TIC_TAC_TOE/DEFAULT") {
+      const rtdbRef = rtdb.ref(`games/tic-tac-toe/${chatId}`);
+      const gameSettings = messageData.overchatData;
+
+      // Generate cols helper
+      const generateCols = (n) => {
+        let c = [];
+        for (let i = 0; i < n; i++) {
+          c.push("");
+        }
+        return c;
+      };
+
+      // Generate board
+      let board = [];
+      for (let i = 0; i < gameSettings.boardSize; i++) {
+        board.push(generateCols(gameSettings.boardSize));
+      }
+
+      functions.logger.log(
+        `Board ${gameSettings.boardSize}x${gameSettings.boardSize} generated`,
+        board
+      );
+
+      await rtdbRef.set({
+        board: board,
+        playerX: messageData.author,
+        playerY: notificationReciverUid,
+        settings: gameSettings,
+        messageId: messageId,
+      });
+    }
+
+    functions.logger.log(`is pending: ${messageData.isPending}`);
+
+    functions.logger.log(`path: chats/${chatId}/messages/${messageId}`);
+
+    if (messageData.isPending == true) {
+      await db.doc(`chats/${chatId}/messages/${messageId}`).update({
+        isPending: false,
+      });
+    }
   });
 
 exports.cleanUpAfterMessageDeletion = functions.firestore
@@ -207,97 +252,35 @@ exports.cleanUpAfterMessageDeletion = functions.firestore
     await messaging.sendMulticast(message);
   });
 
-exports.startTicTacToe = functions.https.onCall(async (data, context) => {
-  const db = admin.firestore();
+exports.finishTicTacToe = functions.database
+  .ref("/games/tic-tac-toe/{chatId}/isEnded")
+  .onCreate((snapshot, context) => {
+    const db = admin.firestore();
+    const chatId = context.params.chatId;
+    const gameRef = snapshot.ref.parent.ref;
 
-  const rtdb = admin.database();
+    functions.logger.log("Got chatId", chatId);
 
-  const chatId = data.chatId;
-  const chatDocRef = db.collection("chats").doc(chatId);
-  const chatDoc = await chatDocRef.get();
-  const chatData = chatDoc.data();
+    return gameRef.once(
+      "value",
+      (gameSnapshot) => {
+        const messageId = gameSnapshot.child("messageId").val();
+        const winner = gameSnapshot.child("winner").exists
+          ? gameSnapshot.child("winner").val()
+          : null;
 
-  const rtdbRef = rtdb.ref(`games/tic-tac-toe/${chatId}`);
+        functions.logger.log(`Winner is ${winner} for message ${messageId}`);
 
-  // get notification reciver uid
-  let notificationReciverUid = null;
-  let senderUid = null;
-  let senderName = "";
-  chatData.participantsData.forEach((participant) => {
-    if (context.auth.uid != participant.uid) {
-      notificationReciverUid = participant.uid;
-    } else {
-      senderName = participant.name;
-      senderUid = participant.uid;
-    }
-  });
-
-  functions.logger.log(`Reciver uid is ${notificationReciverUid}`);
-
-  if (context.auth.uid != senderUid) return;
-
-  // Generate cols helper
-  const generateCols = (n) => {
-    let c = [];
-    for (let i = 0; i < n; i++) {
-      c.push("");
-    }
-    return c;
-  };
-
-  // Generate board
-  let board = [];
-  for (let i = 0; i < data.settings.boardSize; i++) {
-    board.push(generateCols(data.settings.boardSize));
-  }
-
-  functions.logger.log(
-    `Board ${data.settings.boardSize}x${data.settings.boardSize} generated`,
-    board
-  );
-
-  await rtdbRef.set({
-    board: board,
-    playerX: context.auth.uid,
-    playerY: notificationReciverUid,
-    settings: data.settings,
-  });
-
-  // get recivger's tokens
-  const reciverRef = db.collection("users").doc(notificationReciverUid);
-  const reciverDoc = await reciverRef.get();
-  const reciverDocData = reciverDoc.data();
-  const reciverTokens = reciverDocData.notificationsTokens;
-
-  functions.logger.log("Got reciver tokens", { tokens: reciverTokens });
-
-  // prepare message
-  const message = {
-    data: {
-      type: "CHAT/OVERCHAT/TIC-TAC-TOE",
-      id: chatId,
-      senderName: senderName,
-    },
-    notification: {
-      title: "Tic Tac Toe",
-      body: `${senderName} challenged you`,
-    },
-    android: {
-      notification: {
-        tag: `${chatId}/TIC-TAC-TOE`,
+        return db.doc(`chats/${chatId}/messages/${messageId}`).update({
+          overchatData: { isEnded: true, winner: winner },
+        });
       },
-    },
-    tokens: reciverTokens,
-  };
-
-  // send notification
-  const messaging = admin.messaging();
-  await messaging.sendMulticast(message);
-
-  // update chat
-  chatDocRef.update({
-    lastMessageTime: admin.firestore.FieldValue.serverTimestamp(),
-    lastMessageAuthor: senderName.split(" ")[0],
-    lastMessageContent: "Tic Tac Toe game has started",
+      (errorObject) => {
+        functions.logger.error(
+          `The messageId read failed: ${errorObject.name}`,
+          errorObject
+        );
+        return null;
+      }
+    );
   });
-});

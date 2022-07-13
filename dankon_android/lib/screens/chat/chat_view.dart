@@ -5,6 +5,7 @@ import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/screens/chat/paginated_messages_list.dart';
 import 'package:dankon/services/database.dart';
 import 'package:dankon/widgets/cached_avatar.dart';
+import 'package:dankon/widgets/friend_bottom_sheet.dart';
 import 'package:dankon/widgets/message_input.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _ChatViewState extends State<ChatView> {
       ],
       child: Scaffold(
           backgroundColor: chatTheme.backgroundColor,
-          appBar: buildAppBar(chat, myUid, chatTheme),
+          appBar: buildAppBar(context, chat, myUid, chatTheme),
           body: Column(
             children: [
               Expanded(
@@ -56,7 +57,7 @@ class _ChatViewState extends State<ChatView> {
   }
 }
 
-AppBar buildAppBar(Chat chat, String myUid, ChatTheme chatTheme) {
+AppBar buildAppBar(BuildContext context, Chat chat, String myUid, ChatTheme chatTheme) {
   return AppBar(
     centerTitle: false,
     titleSpacing: 0,
@@ -75,6 +76,9 @@ AppBar buildAppBar(Chat chat, String myUid, ChatTheme chatTheme) {
         Text(chat.getChatName(myUid)),
       ],
     ),
+    actions: [
+      IconButton(onPressed: () => showFriendBottomSheet(chat, context), icon: const Icon(Icons.info_outline))
+    ],
   );
 }
 

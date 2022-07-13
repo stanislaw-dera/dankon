@@ -25,8 +25,8 @@ class _PlayTicTacToeViewState extends State<PlayTicTacToeView> {
 
   late TicTacToeSettings gameSettings;
 
-  String currentPlayer = Player.X;
-  String myPlayer = Player.none;
+  String currentPlayer = Player.none;
+  String myPlayer = Player.X;
   late StreamSubscription gameHistoryChanges;
 
   late List<List<String>> board;
@@ -66,6 +66,7 @@ class _PlayTicTacToeViewState extends State<PlayTicTacToeView> {
           TicTacToeSettings.fromSnapshot(event.snapshot.child("settings"));
       myPlayer = _myPlayer;
       isLoading = false;
+      currentPlayer = !event.snapshot.child("history").exists ? Player.X : Player.none;
     });
 
     setState(() {
@@ -100,9 +101,21 @@ class _PlayTicTacToeViewState extends State<PlayTicTacToeView> {
       isLocked = true;
     });
 
+    String? winnerUid;
+    if(winner != null) {
+      if(winner == myPlayer) {
+        winnerUid = myUid;
+      } else {
+        winnerUid = widget.chat.participantsData.firstWhere((theUser) => theUser.uid != myUid).uid;
+      }
+    }
+
     DatabaseReference gameStatusRef = FirebaseDatabase.instance
-        .ref("games/tic-tac-toe/${widget.chat.id}/isEnded");
-    await gameStatusRef.set(true);
+        .ref("games/tic-tac-toe/${widget.chat.id}");
+    await gameStatusRef.update({
+      "isEnded": true,
+      "winner": winnerUid
+    });
 
     showModalBottomSheet(
         context: context,
@@ -204,26 +217,26 @@ class _PlayTicTacToeViewState extends State<PlayTicTacToeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Tic Tac Toe"),
-      ),
-      body: isLoading
+      backgroundColor: TicTacToeUtils.getBackgroundColor(currentPlayer),
+      body: isLoading || currentPlayer == Player.none
           ? const Center(child: CircularProgressIndicator())
-          : Container(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text("Player $currentPlayer turn"),
-                  Expanded(
-                    child: Row(
-                      children: TicTacToeUtils.modelBuilder(
-                          board, (x, value) => buildCol(board, x)),
+          : SafeArea(
+            child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text("Player $currentPlayer turn", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                    Expanded(
+                      child: Row(
+                        children: TicTacToeUtils.modelBuilder(
+                            board, (x, value) => buildCol(board, x)),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+          ),
     );
   }
 }
