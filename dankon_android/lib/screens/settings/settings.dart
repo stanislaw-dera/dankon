@@ -32,7 +32,7 @@ class SettingsScreen extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 children: [
                   ListTile(
-                    title: const Text('Search for friends'),
+                    title: const Text('Add friends'),
                     leading: const Icon(Icons.person_add),
                     onTap: () {
                       Navigator.of(context).pushNamed("/search");
@@ -47,7 +47,7 @@ class SettingsScreen extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    title: const Text('About the app'),
+                    title: const Text('About :Dankon'),
                     leading: const Icon(Icons.info),
                     onTap: () {
                       showAboutDialog(context: context, applicationIcon: CircleAvatar(backgroundColor: Theme.of(context).primaryColor, backgroundImage: const AssetImage('assets/app_logo.png')), applicationVersion: dotenv.env['VERSION']);
