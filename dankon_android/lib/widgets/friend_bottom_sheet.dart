@@ -1,4 +1,5 @@
 import 'package:dankon/constants/chat_themes.dart';
+import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/models/chat_theme.dart';
 import 'package:dankon/widgets/overchat/tic_tac_toe/send.dart';
@@ -81,12 +82,24 @@ class FriendBottomSheet extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          ElevatedButton(
-              onPressed: () {
+          Card(
+            elevation: 0,
+            color: Colors.blue,
+            child: ListTile(
+              leading: const Icon(
+                Icons.gamepad,
+                color: Colors.white,
+              ),
+              title: const Text(
+                "Play tic tac toe",
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
                 Navigator.of(context).pop();
                 sendTicTacToe(context, chat);
               },
-              child: const Text("Start tic tac toe")),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
