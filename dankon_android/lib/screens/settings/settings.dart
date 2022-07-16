@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -44,6 +46,13 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () {
                       context.read<AuthenticationService>().signOut();
                       Navigator.of(context).pop();
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Privacy policy'),
+                    leading: const Icon(Icons.privacy_tip),
+                    onTap: () {
+                      launchUrl(Uri.parse("https://dankon.dera.dev/go/privacy-policy"), mode: LaunchMode.externalApplication);
                     },
                   ),
                   ListTile(
