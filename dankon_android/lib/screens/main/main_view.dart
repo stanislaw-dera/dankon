@@ -3,6 +3,7 @@ import 'package:dankon/constants/constants.dart';
 import 'package:dankon/models/chat.dart';
 import 'package:dankon/screens/main/chats/chats.dart';
 import 'package:dankon/screens/main/danks/danks.dart';
+import 'package:dankon/screens/moments/moments.dart';
 import 'package:dankon/services/unread_messages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,15 +18,19 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
 
+  bool showAppBar = true;
   int _selectedPage = 0;
+
   static const List<Widget> _pages = <Widget>[
     DanksPage(),
-    ChatsPage()
+    ChatsPage(),
+    Moments()
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedPage = index;
+      showAppBar = index != 2;
     });
   }
 
@@ -55,7 +60,7 @@ class _MainViewState extends State<MainView> {
         ],
       child: Scaffold(
         body: SafeArea(
-            child: Column(
+            child: showAppBar ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
@@ -80,17 +85,21 @@ class _MainViewState extends State<MainView> {
                 const SizedBox(height: 10,),
                 Expanded(child: _pages.elementAt(_selectedPage)),
               ],
-            )
+            ) : _pages.elementAt(_selectedPage)
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: ':Dank',
+              icon: Icon(Icons.people),
+              label: 'Friends',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.chat),
               label: 'Chat',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.sentiment_very_satisfied_rounded),
+              label: 'Moments',
             ),
           ],
           selectedItemColor: kDarkColor,
