@@ -31,7 +31,8 @@ class _MomentsState extends State<Moments> {
         authorData: TheUser(
             uid: "myuid47",
             name: "John Smith",
-            urlAvatar: "https://picsum.photos/50/50"));
+            urlAvatar: "https://picsum.photos/50/50"),
+        author: 'fwLq2sx4f81_fa');
 
     return Stack(
       children: [
