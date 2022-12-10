@@ -51,6 +51,7 @@ dependencies:
   badges: ^2.0.2
   intl: ^0.17.0
   cloud_functions: ^3.2.16
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:

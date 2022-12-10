@@ -17,7 +17,6 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-
   bool showAppBar = true;
   int _selectedPage = 0;
 
@@ -42,13 +41,11 @@ class _MainViewState extends State<MainView> {
         .collection("chats")
         .where('allParticipants', arrayContains: myUid)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-        .map((doc) {
-          Map<String, dynamic> jsonData = doc.data();
-          jsonData["id"] = doc.id;
-          return Chat.fromJson(jsonData);
-        })
-        .toList());
+        .map((snapshot) => snapshot.docs.map((doc) {
+              Map<String, dynamic> jsonData = doc.data();
+              jsonData["id"] = doc.id;
+              return Chat.fromJson(jsonData);
+            }).toList());
 
     return MultiProvider(
         providers: [
@@ -56,57 +53,69 @@ class _MainViewState extends State<MainView> {
             value: chatsStream,
             initialData: null,
           ),
-          StreamProvider<Map<String, DateTime>>.value(value: UnreadMessagesService(myUid).unreadMessagesData, initialData: const {})
+          StreamProvider<Map<String, DateTime>>.value(
+              value: UnreadMessagesService(myUid).unreadMessagesData,
+              initialData: const {})
         ],
-      child: Scaffold(
-        body: SafeArea(
-            child: showAppBar ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/settings');
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: kDarkColor,
-                          backgroundImage: NetworkImage(me.photoURL.toString()),
-                          radius: 20,
+        child: Scaffold(
+          body: SafeArea(
+              child: showAppBar
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 20),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/settings');
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor: kDarkColor,
+                                  backgroundImage:
+                                      NetworkImage(me.photoURL.toString()),
+                                  radius: 20,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              const Text(
+                                'Dankon',
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 20,),
-                      const Text('Dankon', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10,),
-                Expanded(child: _pages.elementAt(_selectedPage)),
-              ],
-            ) : _pages.elementAt(_selectedPage)
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: 'Friends',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
-              label: 'Chat',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.sentiment_very_satisfied_rounded),
-              label: 'Moments',
-            ),
-          ],
-          selectedItemColor: kDarkColor,
-          currentIndex: _selectedPage,
-          onTap: _onItemTapped,
-        ),
-        )
-    );
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Expanded(child: _pages.elementAt(_selectedPage)),
+                      ],
+                    )
+                  : _pages.elementAt(_selectedPage)),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.people),
+                label: 'Friends',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.chat),
+                label: 'Chat',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.sentiment_very_satisfied_rounded),
+                label: 'Moments',
+              ),
+            ],
+            selectedItemColor: kDarkColor,
+            currentIndex: _selectedPage,
+            onTap: _onItemTapped,
+          ),
+        ));
   }
 }

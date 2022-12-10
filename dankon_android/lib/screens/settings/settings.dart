@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -25,44 +23,62 @@ class SettingsScreen extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(height: 30),
-          CachedAvatar(url: FirebaseAuth.instance.currentUser!.photoURL.toString(), radius: 50,),
-          const SizedBox(height: 20,),
-          Text(FirebaseAuth.instance.currentUser!.displayName.toString(), style: const TextStyle(fontSize: 18),),
-          const SizedBox(height: 30,),
+          CachedAvatar(
+            url: FirebaseAuth.instance.currentUser!.photoURL.toString(),
+            radius: 50,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            FirebaseAuth.instance.currentUser!.displayName.toString(),
+            style: const TextStyle(fontSize: 18),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
           Expanded(
             child: ListView(
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  ListTile(
-                    title: const Text('Add friends'),
-                    leading: const Icon(Icons.person_add),
-                    onTap: () {
-                      Navigator.of(context).pushNamed("/search");
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Logout'),
-                    leading: const Icon(Icons.logout),
-                    onTap: () {
-                      context.read<AuthenticationService>().signOut();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Privacy policy'),
-                    leading: const Icon(Icons.privacy_tip),
-                    onTap: () {
-                      launchUrl(Uri.parse("https://dankon.dera.dev/go/privacy-policy"), mode: LaunchMode.externalApplication);
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('About :Dankon'),
-                    leading: const Icon(Icons.info),
-                    onTap: () {
-                      showAboutDialog(context: context, applicationIcon: CircleAvatar(backgroundColor: Theme.of(context).primaryColor, backgroundImage: const AssetImage('assets/app_logo.png')), applicationVersion: dotenv.env['VERSION']);
-                    },
-                  )
-                ],
+              physics: const BouncingScrollPhysics(),
+              children: [
+                ListTile(
+                  title: const Text('Add friends'),
+                  leading: const Icon(Icons.person_add),
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/search");
+                  },
+                ),
+                ListTile(
+                  title: const Text('Logout'),
+                  leading: const Icon(Icons.logout),
+                  onTap: () {
+                    context.read<AuthenticationService>().signOut();
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  title: const Text('Privacy policy'),
+                  leading: const Icon(Icons.privacy_tip),
+                  onTap: () {
+                    launchUrl(
+                        Uri.parse("https://dankon.dera.dev/go/privacy-policy"),
+                        mode: LaunchMode.externalApplication);
+                  },
+                ),
+                ListTile(
+                  title: const Text('About :Dankon'),
+                  leading: const Icon(Icons.info),
+                  onTap: () {
+                    showAboutDialog(
+                        context: context,
+                        applicationIcon: CircleAvatar(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            backgroundImage:
+                                const AssetImage('assets/app_logo.png')),
+                        applicationVersion: dotenv.env['VERSION']);
+                  },
+                )
+              ],
             ),
           ),
         ],
